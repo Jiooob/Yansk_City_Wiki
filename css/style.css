@@ -1,0 +1,94 @@
+/* 基础设定与暗色主题 */
+body {
+    background-color: #1a1a1a; /* 暗色背景 */
+    color: #c5c5c5; /* 灰白色文字 */
+    font-family: 'Noto Sans SC', sans-serif; /* 使用思源黑体以获得更好的中文显示 */
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* 容器布局：左侧导航，右侧内容 */
+.container {
+    display: flex;
+}
+
+#sidebar {
+    width: 250px;
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+    background-color: #222;
+    padding: 20px;
+    border-right: 1px solid #00aaff; /* 霓虹蓝边框 */
+}
+
+#content {
+    margin-left: 290px; /* 留出侧边栏空间 */
+    padding: 20px;
+    max-width: 900px;
+}
+
+/* 导航样式 */
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+#sidebar a {
+    color: #c5c5c5;
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+    transition: color 0.2s;
+}
+#sidebar a:hover, #sidebar a.active {
+    color: #00aaff; /* 悬停和激活时变为霓虹蓝 */
+}
+
+/* 搜索框样式 */
+#searchInput {
+    width: 100%;
+    padding: 8px;
+    background: #333;
+    border: 1px solid #555;
+    color: #c5c5c5;
+}
+
+/* 内容标题样式 */
+h1, h2, h3 {
+    color: #e0e0e0;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+h2 { color: #00aaff; } /* 关键标题使用主题色 */
+
+/* ...保留之前的所有CSS代码... */
+
+/* 新增：导航栏活动链接的样式 */
+#sidebar a.active {
+    color: #00ffff; /* 使用更亮的青色作为高亮 */
+    font-weight: bold;
+    border-left: 3px solid #00ffff;
+    padding-left: 10px;
+}
+
+/* --- 新增的表格样式 --- */
+table {
+    width: 100%;
+    border-collapse: collapse; /* 合并边框 */
+    margin-top: 1em; /* 与上方内容留出间距 */
+    margin-bottom: 1em; /* 与下方内容留出间距 */
+}
+
+table, th, td {
+    border: 1px solid white; /* 将所有表格相关的边框设置为1px白色实线 */
+}
+
+th, td {
+    padding: 8px 12px; /* 单元格内边距，增加可读性 */
+    text-align: left; /* 文本左对齐 */
+}
+
+th {
+    background-color: #2c2c2c; /* 为表头设置一个稍亮的背景色以作区分 */
+    color: #00aaff; /* 表头文字使用主题色 */
+}
