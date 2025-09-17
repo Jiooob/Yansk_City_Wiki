@@ -1,0 +1,1398 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+css/style.css
+index.html
+js/main.js
+pages/city_structure_eco.html
+pages/history.html
+pages/power_structure.html
+pages/tech_core_LE.html
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="css/style.css">
+/* 基础设定与暗色主题 */
+body {
+    background-color: #1a1a1a; /* 暗色背景 */
+    color: #c5c5c5; /* 灰白色文字 */
+    font-family: 'Noto Sans SC', sans-serif; /* 使用思源黑体以获得更好的中文显示 */
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* 容器布局：左侧导航，右侧内容 */
+.container {
+    display: flex;
+}
+
+/* ==================== 导航栏双模态交互最终代码 ==================== */
+
+/* --- 0. 定义呼吸动画 (保持不变) --- */
+@keyframes breathe-glow {
+    /* ... 此处代码与之前完全相同，无需修改 ... */
+    0% {
+        border-right-color: rgba(0, 170, 255, 0.2);
+        box-shadow: 2px 0 8px -2px rgba(0, 170, 255, 0.2);
+    }
+    50% {
+        border-right-color: rgba(0, 170, 255, 0.7);
+        box-shadow: 2px 0 18px -2px rgba(0, 170, 255, 0.7);
+    }
+    100% {
+        border-right-color: rgba(0, 170, 255, 0.2);
+        box-shadow: 2px 0 8px -2px rgba(0, 170, 255, 0.2);
+    }
+}
+
+
+/* --- 1. 侧边栏 (#sidebar) 样式 --- */
+#sidebar {
+    /* ... 大部分样式保持不变 ... */
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -220px; 
+    background-color: #222;
+    padding: 20px;
+    z-index: 1000;
+    border-right: 2px solid; 
+    animation: breathe-glow 2s ease-in-out infinite;
+    transition: left 0.3s ease-in-out, 
+                border-color 0.3s ease-in-out, 
+                box-shadow 0.3s ease-in-out; 
+}
+
+/* 核心修正 1：展开状态由两个类共同触发 */
+#sidebar.is-open,
+#sidebar.is-pinned {
+    left: 0;
+    animation: none;
+    border-right-color: #00aaff;
+    box-shadow: 3px 0 20px -3px rgba(0, 170, 255, 0.8);
+}
+
+/* 核心修正 2：为新的切换按钮添加样式 */
+#sidebar-toggle {
+    font-family: 'Arial', sans-serif;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    top: 15px;
+    right: 7px; 
+    transition: color 0.3s ease-in-out;
+}
+/* 展开时，切换按钮更亮 */
+#sidebar.is-open #sidebar-toggle,
+#sidebar.is-pinned #sidebar-toggle {
+    color: rgba(255, 255, 255, 0.9);
+}
+/* 移除了之前的 #sidebar::after 伪元素样式 */
+
+
+/* --- 2. 主内容区 (#content) 样式 --- */
+#content {
+    /* ... 样式保持不变 ... */
+    margin-left: 80px; 
+    padding: 20px;
+    max-width: 900px;
+    transition: margin-left 0.3s ease-in-out; 
+}
+
+/* 核心修正 3：联动逻辑也由两个类共同触发 */
+#sidebar.is-open ~ #content,
+#sidebar.is-pinned ~ #content {
+    margin-left: 280px; 
+}
+
+
+/* --- 4. 导航栏内部元素样式 (保持不变) --- */
+#sidebar h3, #sidebar ul {
+    white-space: nowrap;
+    list-style: none;
+    padding: 0;
+}
+#sidebar a {
+    color: #c5c5c5;
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+    transition: color 0.2s;
+}
+#sidebar a.is-open, #sidebar a.active {
+    color: #00ffff;
+    font-weight: bold;
+}
+
+/* 导航样式 */
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+#sidebar a {
+    color: #c5c5c5;
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+    transition: color 0.2s;
+}
+#sidebar a.is-open, #sidebar a.active {
+    color: #00aaff; /* 悬停和激活时变为霓虹蓝 */
+}
+
+/* 搜索框样式 */
+#searchInput {
+    width: 100%;
+    padding: 8px;
+    background: #333;
+    border: 1px solid #555;
+    color: #c5c5c5;
+}
+
+/* 内容标题样式 */
+h1, h2, h3 {
+    color: #e0e0e0;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+h2 { color: #00aaff; } /* 关键标题使用主题色 */
+
+/* ...保留之前的所有CSS代码... */
+
+/* 新增：导航栏活动链接的样式 */
+#sidebar a.active {
+    color: #00ffff; /* 使用更亮的青色作为高亮 */
+    font-weight: bold;
+    border-left: 3px solid #00ffff;
+    padding-left: 10px;
+}
+
+/* --- 新增的表格样式 --- */
+table {
+    width: 100%;
+    border-collapse: collapse; /* 合并边框 */
+    margin-top: 1em; /* 与上方内容留出间距 */
+    margin-bottom: 1em; /* 与下方内容留出间距 */
+}
+
+table, th, td {
+    border: 1px solid white; /* 将所有表格相关的边框设置为1px白色实线 */
+}
+
+th, td {
+    padding: 8px 12px; /* 单元格内边距，增加可读性 */
+    text-align: left; /* 文本左对齐 */
+}
+
+th {
+    background-color: #2c2c2c; /* 为表头设置一个稍亮的背景色以作区分 */
+    color: #00aaff; /* 表头文字使用主题色 */
+}
+</file>
+
+<file path="index.html">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扬斯克城世界观设定 - 主页</title>
+    
+    <link rel="stylesheet" href="css/style.css"> 
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar">
+    <h3>导航菜单</h3>
+    <ul>
+        <li><a href="index.html">主页</a></li>
+
+        <li><a href="pages/tech_core_LE.html">光能科技核心设定</a></li>
+        <li><a href="pages/history.html">光能科技发展史</a></li>
+        <li><a href="pages/city_structure_eco.html">上扬斯克城：结构与生态</a></li>
+        <li><a href="pages/power_structure.html">社会与权力结构</a></li>
+    </ul>
+</nav>
+
+        <main id="content">
+            <header>
+                <h1>扬斯克城世界观：已知设定汇总</h1>
+            </header>
+            <section>
+                <h2>欢迎来到上扬斯克城</h2>
+                <p>此站点收录了《扬斯克城世界观》的全部已知设定。</p>
+                <p>请使用左侧的导航栏来浏览不同的章节内容。</p>
+                <p>城市从海上拔地而起，位于西北海区域的城市群中，“上扬斯克城”（Verkhoyansk City）。</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
+</file>
+
+<file path="js/main.js">
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const navLinks = document.querySelectorAll('#sidebar a');
+
+    // --- 页面加载逻辑 ---
+    // 检查是否有“固定展开”的状态需要继承
+    if (sessionStorage.getItem('sidebarPinned') === 'true') {
+        sidebar.classList.add('is-pinned');
+        sessionStorage.removeItem('sidebarPinned'); // 读取后即焚
+    }
+
+    // --- 交互事件监听 ---
+
+    // 1. 点击切换按钮：切换“固定”状态
+    sidebarToggle.addEventListener('click', (event) => {
+        event.stopPropagation(); // 防止事件冒泡
+        sidebar.classList.toggle('is-pinned');
+    });
+
+    // 2. 鼠标悬浮：添加临时的“悬浮”状态
+    sidebar.addEventListener('mouseenter', () => {
+        sidebar.classList.add('is-open');
+    });
+
+    // 3. 鼠标离开：移除临时的“悬浮”状态
+    sidebar.addEventListener('mouseleave', () => {
+        sidebar.classList.remove('is-open');
+    });
+
+    // 4. 点击导航链接：处理状态转换
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // 核心逻辑：如果导航栏是“悬浮展开”但不是“固定展开”
+            if (sidebar.classList.contains('is-open') && !sidebar.classList.contains('is-pinned')) {
+                // 则在跳转前，将其状态“提升”为固定状态
+                sessionStorage.setItem('sidebarPinned', 'true');
+            } 
+            // 如果导航栏本身就是“固定展开”的
+            else if (sidebar.classList.contains('is-pinned')) {
+                // 则在跳转后依然保持这个状态
+                sessionStorage.setItem('sidebarPinned', 'true');
+            }
+            // 如果是收缩状态下点击（理论上不可能），则不执行任何操作
+        });
+    });
+
+    // --- 导航高亮逻辑 (保持不变) ---
+    const currentPagePath = window.location.pathname;
+    document.querySelectorAll('#sidebar a').forEach(link => {
+        const linkPath = link.getAttribute('href');
+        if (currentPagePath.endsWith(linkPath)) {
+            link.classList.add('active');
+        }
+    });
+});
+</file>
+
+<file path="pages/city_structure_eco.html">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设定 - 上扬斯克城：结构与生态</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar">
+            <h3>导航菜单</h3>
+            <ul>
+                <li><a href="../index.html">主页</a></li>
+                <li><a href="tech_core_LE.html">光能科技核心设定</a></li>
+                <li><a href="history.html">光能科技发展史</a></li>
+                <li><a href="city_structure_eco.html">上扬斯克城：结构与生态</a></li>
+                <li><a href="power_structure.html">社会与权力结构</a></li>
+            </ul>
+        </nav>
+
+        <main id="content">
+            <header>
+                <h1>上扬斯克城：结构与生态</h1>
+            </header>
+
+            <section>
+                <ul>
+                    <li>
+                        <strong>地理位置与建造缘由：</strong>
+                        <ul>
+                            <li><strong>地理位置：</strong> 连接海洋，且受到海水的湿气影响，长期笼罩在氤氲氛围中，潮湿和下雨是常态。</li>
+                            <li><strong>建造方式：</strong> 城市拔地而起，不仅依靠光能悬浮，还依赖巨大的结构支撑（光能无法无限支撑巨量物体）。</li>
+                            <li><strong>建造的必然性：</strong> 城市的选址并非偶然。星球90%以上的高品质“谐振核材料”都富集在西北海下方的“古菌摇篮”盆地中。而光能科技的启动过程，需要借助<strong>海水作为“谐振放大透镜”</strong>，才能使能源投入产出比为正。因此，直接在矿脉正上方建造一座集开采、催化、应用于一体的海上垂直城市，是技术和经济上的唯一解。</li>
+                        </ul>
+                    </li>
+                    <li><strong>城市规模：</strong> 占地极大，高度极高。</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>内部降雨：</h3>
+                <p>城市各个层级和城区之间的间隙能够满足积云形成并降雨，雨水从高处垂落</p>
+                <h4>雨水流向与水雾：</h4>
+                <p>"城市中形成的雨水和高层排水沟的水滴，有的会被风吹散，更多的则会沿着排水系统或结构边缘直接落入低处的排水沟，继而层层下落，最终汇入基底区并排入西北海。这种持续的垂直降水也导致城市各层级间常年弥漫着湿润的水雾，有时居民甚至难以分辨空气中下落的水滴究竟是自然降雨还是来自上方的排水。然而，扬斯克居民对这种‘天降之水’的利用，尤其是在中下层区域，展现了极大的创造力。</p>
+            </section>
+
+            <section>
+                <h3>交通网络：</h3>
+                <ul>
+                    <li>各个城区之间由高速光轨和巨型隧道连接。</li>
+                    <li><strong>高速光轨：</strong> 建造在城区主要交通要道上，两侧有可见淡蓝色光幕分隔，截面像高度比宽度稍长的长方形，左下角和右下角有复合栏杆架构和光能输送装置，底部是定向光能激发器，为飞车提供速度。</li>
+                    <li><strong>飞车：</strong> 可以脱离光轨行驶，但需要消耗额外的化石燃料。当支撑飞车及巨构的光能斥力达到一定阈值时，其下方的物体受到的震荡涟漪会使其失去稳定。</li>
+                    <li>
+                        <strong>光能基础设施：</strong>
+                        <ul>
+                            <li>扬斯克的每个城区都有或大或小的共振设施，由公共安全委员会看守。</li>
+                            <li>最主要的共振设施被建造在巨型城基柱的内部。</li>
+                            <li>城市内的光能传输网络——<strong>光能共振管道</strong>——像人体神经一样延伸到城市的各个角落，中继站、共振中继站有规律地分布。</li>
+                            <li><strong>维护衰败：</strong> 随着光能时代的成熟和推移，很多中下层城区（如<strong>雨幕区</strong>和下城区）的基建（包括光能共振管道、中继站）只能得到相较于正常维护的60%甚至30%，事故常有发生，这是社会矛盾之一。</li>
+                        </ul>
+                    </li>
+                    <li><strong>行人路径与平台/栈道：</strong>
+                        <p>扬斯克城内，行人主要通过遍布各层级的钢架平台与连接它们的栈道移动。这些步行设施在不同层级有着显著的差异：<strong>天穹区</strong>的平台和栈道多采用不易塌陷和断裂的混凝土和塑钢结构，日常由西北海建设局（NWSCB）的环卫机器和工人进行高标准维护，保持整洁。<strong>经纬区</strong>的设施则相对脏乱、老旧。而下层城区，大部分是由钢制栅栏结构构成，因年久失修而出现生锈、断裂，行走其上常伴随嘎吱作响，且表面湿滑并滋生青苔。此外，城市中还存在大量由私人搭建的栈道和平台，有些横跨官方设施的断裂处，有些仅为方便居民个人通行，甚至有部分被帮派占据并收取过路费。这些私人搭建的设施使得城市空间结构更加复杂和错综。</p>
+                    </li>
+                    <li><strong>平台式电梯：</strong>
+                        <p>城市中的垂直交通主要依赖由光能驱动的‘平台’式电梯，而非传统的轿厢电梯。这些平台由底部的操作员控制，根据其所在层级提供不同的乘坐体验：<strong>天穹区</strong>的平台电梯配备玻璃罩、优良的恒稳系统，提供高安全系数的平稳乘坐。相比之下，下层城区的平台电梯则大部分以简陋的铁栅栏结构作为站立基础，常有漏水、透风，且护栏缺失或损坏，缺乏恒稳系统，导致过去常有失足坠落事故。因此，一些民间组织会在这些性能低下的平台电梯上加装简易的防护网，以保障居民安全。</p>
+                    </li>
+                    <li><strong>传统轨道交通：</strong>
+                        <p>除了高度依赖光能悬浮的交通方式，城市中还保留并发展了传统意义上的公共轨道交通，其形态更类似于地铁。这些交通工具采用光能、电能以及化石燃料作为混合动力源，主要服务于中下层居民。受限于维护预算和使用强度，其乘坐环境通常较为拥挤和简陋。</p>
+                    </li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>扬斯克城：居民生活与文化</h3>
+                <h4>生存基础：衣食住行与环境适应</h4>
+                <p>在扬斯克城，居住环境是阶级分化的最直观体现。越往下层，房屋越显破败与拥挤，却也充满了底层民众特有的生存智慧。</p>
+                
+                <h5>下城区与基底区：</h5>
+                <ul>
+                    <li><strong>“叠盒式”居所：</strong> 这里的住宅多是依附在城市巨构或废弃建筑空隙中的“叠盒式”居所，由回收的金属板、复合塑料甚至防水帆布拼凑而成。房屋内部通常潮湿、光线昏暗，常年弥漫着霉味和各种工业混合的气味。通风主要依赖那些被雨水冲刷得发白的、不规则的通风口，或是居民自行改造的简易排湿管道。</li>
+                    <li><strong>共享空间：</strong> 空间极其宝贵，许多家庭挤在狭小的单间里，多代同堂是常态。公共的卫生设施和洗涤区域往往破旧不堪，常有管道滴水，地面湿滑并滋生青苔。狭窄的巷道和临时的廊桥连接着这些居所，形成了迷宫般的社区网络。</li>
+                    <li><strong>防潮与排水：</strong> 居民们发展出各种土法防潮措施，例如用加热过的石板或废弃的光能电池板进行简易除湿，在墙壁上涂抹一种含有霉菌抑制剂的粘土，或是用悬挂的吸湿材料来应对无处不在的湿气。</li>
+                    <li><strong>排水河道：</strong> 在下城区特别是靠近基底的区域，随处可见宽度堪比河流的<strong>“排水河道”</strong>。这些河道汇集了上层城区和中层区域通过排水管道流下的所有水源，形成独特的城市内河。水流湍急，带着各种城市杂物倾泻而下，最终汇入基底区并排入西北海。由于这些主干河道承载着巨大的水量，其泄洪能力远超普通居民的沙袋防御，因此面对突如其来的排水浪涌，个人防范往往无济于事，居民不得不习惯穿着高筒防水靴，或接受家中地面常被浸湿的现实。</li>
+                    <li><strong>光线稀缺：</strong> 由于城市结构遮挡和雨雾弥漫，下层城区几乎看不到阳光。居民的照明主要依赖低功率的光能灯具或非法接入 的能量驱动的简易灯串，它们的光线摇曳不定，让整个区域显得阴沉而朦胧。</li>
+                </ul>
+
+                <h5>雨幕区：</h5>
+                <ul>
+                    <li><strong>“半独立”公寓：</strong> 相较于下城区，<strong>雨幕区</strong>居民的居住条件有所改善，多为老旧但结构尚可的“半独立”公寓楼。这些公寓通常有独立的供能接口（但易受“能量劫断”影响），内部空间稍大，但同样面临湿气重、维护差的问题。</li>
+                    <li><strong>垂直社区：</strong> 这里的建筑密度依然很高，一些居民楼之间通过空中走廊或改装过的平台连接，形成了更为紧密的垂直社区。窗外常常是其他建筑的墙壁、复杂的管道网络，或是向下延伸的无尽雨幕。</li>
+                </ul>
+                
+                <h5>基础供水结构：</h5>
+                <ul>
+                    <li>城市最底部的<strong>“海水综合处理系统”</strong>布设在基底区深处，由<strong>NWSCB设计</strong>、由<strong>ULTE提供斥力增压能源</strong>，从海洋引水至多级反渗透与光能蒸馏系统后，向上城区反向供水。</li>
+                    <li>处理后的水通过<strong>“光能脉冲增压管网”</strong>，借助定向斥力从下至上传输至全城。</li>
+                </ul>
+                
+                <h5>水源层级差异：</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>城区层级</th>
+                            <th>主要水源</th>
+                            <th>特征/问题</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>日光区/天穹区</td>
+                            <td>纯净反渗透供水 + 云层降水</td>
+                            <td>供应稳定，含轻微微量矿物，饮用标准高</td>
+                        </tr>
+                        <tr>
+                            <td>经纬区</td>
+                            <td>处理水+人工云层冷凝水</td>
+                            <td>偶有供水延迟，需家用储水器</td>
+                        </tr>
+                        <tr>
+                            <td>雨幕区</td>
+                            <td>冷凝水+降水收集+管网抽取</td>
+                            <td>需自配光能过滤罐，部分有铁锈味</td>
+                        </tr>
+                        <tr>
+                            <td>下城区/基底区</td>
+                            <td>雨水+湿气冷凝+再生水</td>
+                            <td>管道老化严重，容易污染，自行过滤文化兴起</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h5>天降之水的饮用与净化：</h5>
+                <ul>
+                    <li>在下层城区，除了官方的低质供水，居民们还对‘天降之水’进行创造性利用。他们会在露天平台或窗外设置各种简易的‘空中集水器’（Sky-Catchers），如多层织网、倒置伞状结构，被动收集高处落下的水滴。这种未经处理的水通常需居民自行过滤。此外，一些技术爱好者或黑市商家还可能提供简易的‘共振净化器’（Resonance Purifier），利用光能废波或低频共振来震荡并沉淀水中杂质，尽管效率不高且可能产生不明副作用。</li>
+                </ul>
+                
+                <h5>主流供食模式：</h5>
+                <ul>
+                    <li><strong>合成有机质</strong>为主流，来自<strong>官方认证食品供应公司（如“营元仓”YingyuanSynth）</strong>。</li>
+                    <li>样式齐全但口感单调，普遍强化有维生素/能量/激素成分。</li>
+                    <li><strong>天穹区</strong>供应“仿生态风味包”可模拟传统料理风味，但价格高昂。</li>
+                </ul>
+                
+                <h5>非官方获取方式（以下内容多见于下层城区，部分违法）：</h5>
+                <ul>
+                    <li><strong>潮生种植（Fungus&Fern Farming）：</strong>
+                        <ul>
+                            <li><strong>描述：</strong> 基底区常年潮湿，废弃楼体中自发形成“天然藻苔层”与“孢子垂蔓”，居民培育后可食用。</li>
+                            <li><strong>特色：</strong> 含少量维生素与可溶性蛋白，口感滑腻，常与强烈香料食用。多作为炖煮基础或“光能炉片烘干后食用”。</li>
+                        </ul>
+                    </li>
+                    <li><strong>合成食残料再精炼（Second-Factor Cooking）：</strong>
+                        <ul>
+                            <li><strong>描述：</strong> 通过家庭设备或社区合作社，将合成食品残余与不可消化废渣，经过<strong>“频率调控脱构重构”</strong>处理，再次转化为新型食品基底。</li>
+                            <li><strong>变体：</strong> 一些光能调频爱好者将此类残料“谐振重调”，使其重组结构形成可咀嚼凝胶。</li>
+                        </ul>
+                    </li>
+                    <li><strong>街头“虫食流派”：</strong>
+                        <ul>
+                            <li><strong>描述：</strong> 地下温暖管道与废弃塔体常有大体型生物链残留生物（如“滤波虫”或“共振沙蠕”）。这些被视为“频率顺应型生物”，体内富含高密度蛋白，经过处理后可食用。</li>
+                            <li><strong>例子：</strong> “爆共振虫脆片”、“蠕液酱”、“频段虫卵煎饼”（地下热食摊名菜）。</li>
+                        </ul>
+                    </li>
+                    <li><strong>“梦市回收食”：</strong>
+                        <ul>
+                            <li><strong>描述：</strong> 一些光能技术边缘社区建立<strong>“回味市场”</strong>：利用<strong>记忆植入技术残余</strong>诱发味觉记忆模拟，通过神经模拟获得“进食体验”。常用于对“吃”已无欲望但需维持社交的人群中。</li>
+                        </ul>
+                    </li>
+                    <li><strong>水滴栽培：</strong>
+                        <ul>
+                            <li>在一些垂直农场或私人种植区，居民会利用自然落下的雨水和排水滴进行‘水滴栽培’（Drip Cultivation），尤其是对潮生植物的灌溉，这在一定程度上补充了合成食品的单调。</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h5>能源使用</h5>
+                <ul>
+                    <li><strong>合法使用：</strong>
+                        <ul>
+                            <li>城市居民需通过<strong>光能账户系统</strong>按需使用能量（供热、照明、烹饪、简易悬浮）。</li>
+                            <li>家庭单位配有认证“光能接入模块”（PLIM），绑定账户+信用+地段。</li>
+                        </ul>
+                    </li>
+                    <li><strong>非法接入现象：</strong>
+                        <ul>
+                            <li><strong>“暗接者”：</strong>
+                                <ul>
+                                    <li><strong>描述：</strong> 通过自制波导线圈与中继站老化节点进行“频率钓鱼”，吸取部分剩余共振波能。</li>
+                                    <li><strong>风险：</strong> 频率不稳定会烧毁接入设备，引发微型共振震荡。</li>
+                                </ul>
+                            </li>
+                            <li><strong>“邻能共享”：</strong>
+                                <ul>
+                                    <li><strong>描述：</strong> 一户拥有合法能量配额的家庭，通过地下改造向周边用户贩卖“副波接入”。</li>
+                                    <li><strong>常见于：</strong> <strong>雨幕区</strong>，共享节点常装在排气孔或信号塔阴影区。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h5>环境适应与衍生文化</h5>
+                <p>居民们在长期与湿气和雨水共存中，发展出更多独有的适应方式。</p>
+                <ul>
+                    <li><strong>服装与个人装备：</strong>
+                        <ul>
+                            <li><strong>快干纤维与合成防水材料：</strong> 居民的日常衣物多采用廉价的合成快干纤维，不易吸水且易于清洗。一些人会用回收的防水材料缝制简易的雨披或外套，以便在垂直降水区活动。</li>
+                            <li><strong>“除湿背包”：</strong> 在扬斯克城的潮湿区域，<strong>“除湿背包”</strong>几乎是居民出行的<strong>常备品</strong>。这种背包内含小型吸湿材料和微型风扇，能持续工作，有效减轻潮湿对身体和随身物品的侵扰，在很大程度上成为了居民适应环境的必需品。</li>
+                        </ul>
+                    </li>
+                    <li><strong>建筑与空间利用：</strong>
+                        <ul>
+                            <li><strong>“空中晾晒网”：</strong> 这种网状结构并非用于日常的简单晾晒。它通常被设置在居民楼外墙或连接廊道间，是一种<strong>特殊的“道具”</strong>。每当<strong>“大通风平层”开始新一轮“周期流通换气”</strong>，造成整个区域出现快速、短暂的空气流通时，居民们会争分夺秒地利用这难得的时机，将衣物、潮生植物或需要干燥的物品悬挂在“空中晾晒网”上，以期在空气快速流动中迅速烘干。</li>
+                            <li><strong>“垂直温室”：</strong> 部分居民利用楼体间的缝隙或废弃空间，搭建简易的垂直温室，利用光能废热和水滴栽培技术，种植一些对湿度有要求的作物，如特殊的真菌或药用植物。</li>
+                        </ul>
+                    </li>
+                    <li><strong>日常环境适应技巧</strong>
+                        <ul>
+                            <li><strong>湿气洗涤：</strong> 部分居民会利用空气中的水雾和漂浮的水滴进行‘湿气洗涤’（Mist-Wash），如用带有吸收性的织物在潮湿空气中擦拭衣物或身体进行简单清洁。</li>
+                            <li><strong>水能驱动的简易设备：</strong> 一些简易机械装置，例如小型磨坊或风扇，可能会利用高处下落水的冲击力来驱动，为中下层社区提供少量的本地能源。</li>
+                            <li><strong>冷却剂用途：</strong> 一些过热的简易设备或非法光能装置，会直接利用‘天降之水’作为冷却剂，以防止设备过载损坏。</li>
+                            <li><strong>水滴计时：</strong> 在缺乏精确预警系统的底层区域，居民有时会通过观察水滴下落的节奏和累计量来估算时间或降雨量，形成一种原始的‘水滴计时’预警方式。</li>
+                            <li><strong>声音适应：</strong> 长期的雨声和管道水流声，使得下层居民对噪音的容忍度极高。许多人反而觉得这种持续的“白噪音”带来了安全感和一种独特的城市韵律。一些简易的音乐设备甚至会模仿雨声和水流声。</li>
+                        </ul>
+                    </li>
+                    <li><strong>底层的“合成前置堆肥系统”：</strong>
+                        <ul>
+                            <li><strong>概念：</strong> 将<strong>厨余、残料、低能级生物体</strong>通过低频共振转化系统处理为“能量富集介质”，再用于孢子植物/微藻种植。</li>
+                        </ul>
+                    </li>
+                    <li><strong>实际表现形式：</strong>
+                        <ul>
+                            <li><strong>微型藻池系统（Glop-Bins）</strong>：
+                                <ul>
+                                    <li>用废旧光能电池壳体制成，内附频率诱导层，辅助培养可食藻。</li>
+                                    <li>可直接贴墙种植，常见于“雨影街区”屋顶或巷底。</li>
+                                </ul>
+                            </li>
+                            <li><strong>“公共孢植柱”项目</strong>：
+                                <ul>
+                                    <li>社区中心设有开放孢植塔，居民投料后获得肥料积分，用于换取低配合成食品或加热时间。</li>
+                                </ul>
+                            </li>
+                            <li><strong>“生物溶解回收炉”</strong>（非法）：
+                                <ul>
+                                    <li>黑市装置，可高效熔解动物残骸/尸体/滤波虫等，转化为富能肥料。</li>
+                                    <li>常与教派或极端组织合作，传说中有“人类再循环炉”被用于邪教祭祀。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h4>社会面貌：工作、教育与娱乐</h4>
+                <p>扬斯克城中下层的经济活动是官方与非法的混合体，生存的压力催生了五花八门的职业。</p>
+                <h5>官方许可的一些低薪工作：</h5>
+                <ul>
+                    <li><strong>城市维护工：</strong> 大量居民受雇于NWSCB或PSC的次级承包商，从事城市巨构、光轨、排水系统等基础设施的清洁、修补和简单维护工作。这些工作通常危险、薪酬低且缺乏保障，尤其是在高空作业或深入基底区的湿暗区域时。</li>
+                    <li><strong>光能垃圾回收员：</strong> 负责收集处理城市各层的工业废料和生活垃圾，其中一部分被送往“合成前置堆肥系统” 进行再利用。这项工作环境恶劣，但能接触到各种废弃材料，其中不乏可回收或二次利用的部件。</li>
+                    <li><strong>港区搬运工/维修员：</strong> 在港口区域，有大量的体力劳动者从事货物装卸、船只维护等工作。由于港区常有特制塔体群负责能源转输与浮空结构稳态修正，这里的工人往往对光能设备有着粗浅但实用的了解。</li>
+                    <li><strong>合成食品加工员：</strong> 在“营元仓”或其他官方食品公司的下层加工厂工作，负责合成食品的初级生产、包装和分发。这些工作枯燥且劳动强度大，但相对稳定。</li>
+                </ul>
+                <h5>灰色地带与非法经济：</h5>
+                <ul>
+                    <li><strong>“能量暗接者”与改造技工：</strong> 除了已知的私下“反向调校”压缩塔和“频率钓鱼” 外，许多技术型人才专门从事光能模块的非法改装，例如提高飞车速度的“超频加速包”、延长小型设备供能时间的“扩容光匣”，以及用于非法活动的“定向干扰器”。这部分人往往拥有官方无法企及的实用技能。</li>
+                    <li><strong>废品拾荒者与“重构师”：</strong> 在城市深处和废弃区域，大量居民以拾荒为生，收集那些被官方遗弃的、仍有利用价值的材料。其中一部分人被称为“重构师”，他们能将废弃的部件重新组装或改造，制成各种非官方设备，如简易的“共振净化器”、自制小型发电机，甚至非法武器。</li>
+                    <li><strong>走私与黑市：</strong> 除了地下能源走私，黑市还贩卖各种官方严格管控的物品，如未经合成的天然食品、稀有药物、未注册的义体配件、甚至来自<strong>天穹区</strong>的废弃奢侈品。走私路线往往蜿蜒复杂，利用城市内部的废弃管道、低效中继站覆盖区 或帮派控制的“私人搭建栈道”。</li>
+                    <li><strong>“水滴农夫”与“潮生菌农”：</strong> 结合“天降之水”和“潮生种植” 的文化，一些居民在隐蔽的角落搭建垂直农场，种植苔藓、真菌和一些耐湿植物，作为补充食物来源，甚至形成小规模的地下农产品交易。</li>
+                </ul>
+                
+                <h5>教育与医疗的匮乏</h5>
+                <p>中下层城区的教育和医疗资源极为匮乏，使得居民的健康和知识水平受到严重影响。</p>
+                <ul>
+                    <li><strong>教育：</strong>
+                        <ul>
+                            <li><strong>基础普及教育：</strong> 城市设有少量由公司联合体资助的基础学校，提供最基本的识字、计算和公民教育。然而，教学质量参差不齐，师资力量薄弱，且课程内容往往带有强烈的公司宣传色彩。</li>
+                            <li><strong>技能速成班：</strong> 更多的是由社区或私人开设的非正式“技能速成班”，教授一些实用的生存技能，如简易维修、数据终端操作、基础工程学或非法光能技术入门。这些课程收费低廉，甚至可以用劳务抵扣。</li>
+                            <li><strong>“知识贩子”与信息黑市：</strong> 在信息受控的环境下，存在一些“知识贩子”，他们通过非法途径获取上层或外部世界的知识、新闻和技术资料，并在黑市上以数据芯片或口头传授的方式贩卖，满足底层居民对真相和机会的渴望。</li>
+                            <li><strong>家族传承：</strong> 许多实用知识和手艺（如对潮湿环境的适应方法、简易维修技巧）通过家族内部传承，而非正规教育。</li>
+                        </ul>
+                    </li>
+                    <li><strong>医疗：</strong>
+                        <ul>
+                            <li><strong>“公共诊疗点”：</strong> 仅有少数由PSC或慈善机构设立的简陋“公共诊疗点”，提供基础的诊断和应急处理。药品和医疗设备严重匮乏，许多慢性病和湿气相关的疾病（如风湿、皮肤感染、呼吸道疾病）无法得到有效治疗。</li>
+                            <li><strong>民间疗法与“街头医生”：</strong> 由于官方医疗体系的不足，民间疗法盛行。一些“街头医生”或“土法治疗师”使用传统草药、简易手术或通过经验判断来治疗疾病。他们的技术水平参差不齐，但往往是底层居民唯一的选择。</li>
+                            <li><strong>疾病负担：</strong> 潮湿的环境、恶劣的卫生条件和合成食品的长期影响，使得中下层居民普遍体弱多病，平均寿命显著低于上层城区。营养不良、代谢紊乱和由工业污染导致的各类疾病屡见不鲜。</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h5>娱乐与社交</h5>
+                <p>尽管生活艰难，中下层居民仍有自己的娱乐方式和社交网络，为压抑的生活带来一丝喘息。</p>
+                <ul>
+                    <li><strong>社区集会与“垂直广场”：</strong> 在那些“大叠楼”式的垂直广场，即使是下层区域，也会有简易的集市和表演区，人们在此进行商品交易、交换信息，或是观看一些非官方的街头表演，如即兴音乐、光影戏（利用廉价光能设备投射出的简陋幻象）。这些地方是居民重要的社交中心。</li>
+                    <li><strong>地下竞技与赌博：</strong> 在一些废弃的工业区或被帮派控制的空旷地带，会举办非法的光能装置竞技（如“飞车改造赛”）、徒手格斗或高空跑酷比赛。这些活动充满了危险，但也为参与者提供了一夜暴富或名扬一层的机会，吸引了大量赌徒和寻求刺激的人。</li>
+                    <li><strong>“回味市场”与虚拟享乐：</strong> “梦市回收食” 的概念扩展到更广泛的虚拟享乐。一些地下运营商提供“记忆植入”或“感官模拟”服务，让居民短暂体验上层世界的奢华生活、自然风光或久违的“传统美食”味道。这是一种廉价的逃避现实方式，但也可能导致精神依赖。</li>
+                    <li><strong>“数据碎片收藏”：</strong> 居民们会通过各种途径收集老旧的数据碎片、残缺的影像或音频文件，这些可能来自战前、扬斯克建成初期或是上层流出的娱乐内容，成为他们了解外部世界或回顾“黄金时代”的窗口，也是一种重要的怀旧和文化寄托。</li>
+                    <li><strong>社交网络与帮派：</strong> 除了血缘和邻里关系，帮派在底层社会扮演了重要角色。它们不仅参与非法活动，也在一定程度上为成员提供保护、资源分配和社交归属感，成为许多无依无靠者的“另类家庭”。不同帮派之间有固定的势力范围和不成文的规矩。</li>
+                </ul>
+
+            </section>
+
+            <section>
+                <h3>城区简介</h3>
+                <ul>
+                    <li><strong>十大城区</strong>（大致由下至上排序）：<strong>基底区、港区、下城区、雨幕区、枢纽区、经纬区、大通风平层、天穹区、日光区、外延环区</strong></li>
+                </ul>
+
+                <h4>空间分布</h4>
+                <p><em><strong>基底区</strong></em>：位于扬斯克的最底部，地基直接深入海平面之下。</p>
+                <p><em><strong>港区</strong></em>：位于扬斯克的西边中下层以及下层，在基底区、<strong>雨幕区</strong>、<strong>经纬区</strong>下半部分的西边，接壤。其总体形状呈L形，在城市的西北方向下层向西延伸进入海基。</p>
+                <p><em><strong>下城区</strong></em>：位于基底区的上方，其下界和基底区的上界紧密连接，部分地区互相有结构交错，二者的覆盖面积基本相同，但是在西边部分，下城区并未覆盖于基底区之上，即，下城区并没有和港区接壤，其之间相隔着厚度大约为2000米的A部分<strong>雨幕区</strong>。</p>
+                <p><em><strong>雨幕区</strong></em>：A部分位于下城区和基底区之间且底部和基底区接壤，西边与港区接壤，厚度约为2000m，B部分覆盖在A部分和下城区之上且与港区接壤。</p>
+                <p><em><strong>枢纽区</strong></em>：A部分垂直方向界面呈类圆形，位于<strong>雨幕区</strong>和港区交界处，直接从下向上贯穿港区和<strong>雨幕区</strong>，然后上升越过<strong>雨幕区</strong>之后，分出一根分支，即B部分开始向东侧并斜向上延伸，原来的主干即C部分继续向上延伸并穿过<strong>经纬区</strong>的向上延伸的A部分。</p>
+                <p><em><strong>经纬区</strong></em>：下界位于<strong>雨幕区</strong>上方约1500m处，A部分直接从<strong>雨幕区</strong>与枢纽区交接部分的上方开始，B部分顺着枢纽区的B部分延伸，此时看去，<strong>雨幕区</strong>和<strong>经纬区</strong>就像一个C字结构，枢纽区B部分依附在<strong>经纬区</strong>的B部分。</p>
+                <p><em><strong>大通风平层</strong></em>：这是最特殊的一个功能性城区之一，其核心部分位于<strong>经纬区</strong>和<strong>雨幕区</strong>之间，然后从核心部分的下界延伸出巨大结构贯穿<strong>雨幕区</strong>和下城区，直接抵达基底区，并呈现根状结构向周围扩散，穿过基底区抵达城市外部。核心部分的上界，开始延伸出呈树枝状的结构，遍布<strong>经纬区</strong>，<strong>天穹区</strong>，日光区。</p>
+                <p><em><strong>日光区</strong></em>：位于<strong>经纬区</strong>之上区域的西北部分，上界高度高于<strong>天穹区</strong>的上界高度。</p>
+                <p><em><strong>天穹区</strong></em>：位于<strong>经纬区</strong>之上区域的东南部分，上界高度低于日光区的上界高度。</p>
+                <p><em><strong>外延环区</strong></em>：位于城市的外围东部和南部，呈环状，结构松散。</p>
+
+                <h4>垂直分层和社会阶级</h4>
+                <ul>
+                    <li><strong>贫富差距明显：</strong> 越往上的居民越富有，享受更好的生活条件和更接近“天空”的体验。</li>
+                    <li><strong>最底层：</strong> 连接海洋，是城市最基本、最基础的维持运转的结构所在，也是贫民居住区，环境潮湿、阴暗。</li>
+                    <li><strong>阶层固化：</strong> 有些人甚至一辈子都没有见过天空，没有出过城市。</li>
+                </ul>
+                
+                <h3>城区介绍</h3>
+                <h4>日光区（SUNLIGHT DISTRICT）</h4>
+                <ul>
+                    <li><strong>物理环境与建筑：</strong>
+                        <p>位于扬斯克城西北高空，是公司高层、精英阶层的居住地。</p>
+                        <p>建筑齐整、设施完善、规划合理，外型类似现实中的富人区建筑。</p>
+                        <p>广泛使用前沿高科技材料，涵盖供暖、供电、供能及循环系统。</p>
+                        <p>安保措施严密到位。</p>
+                        <p>受湿气影响显著小于下层城区，气候宜人，降水由人工调控。</p>
+                    </li>
+                    <li><strong>光能科技与基础设施：</strong>
+                        <p><strong>能源供应：</strong> 无独立中继站，光能直接由<strong>经纬区</strong>的中继站通过管网引入，对居民生活干扰极小。</p>
+                        <p><strong>ULTE“弥散协议”试点：</strong> 仅在<strong>天穹区</strong>（可能包含日光区）开展了试点使用，表明该技术仍未大规模普及。</p>
+                        <p><strong>交通：</strong> 飞车和平台交通平稳、性能稳定，与日光区的物质条件相符。</p>
+                        <p><strong>无平台电梯：</strong> 日光区是扬斯克城唯二没有平台电梯的区域之一，因其居民出行主要依赖浮空板和小型飞车，无需传统电梯。</p>
+                        <p><strong>公司博弈：</strong> ULTE与NWSCB在此处的竞争不如中下层城区激烈，PSC的暴力执法也相应减少。</p>
+                    </li>
+                    <li><strong>社会生态与居民生活：</strong>
+                        <p><strong>进入权限：</strong> 日光区权限森严，仅限于高层阶级长住；无权限或低权限市民逗留时间限制在一天以内，且会遭到盘查。</p>
+                        <p><strong>“光之律会”：</strong> 存在脱离底层、数量稀少、基于飘渺幻想的“光之律会”教派分支。</p>
+                        <p><strong>生活方式：</strong> 居民常见天空、太阳、月亮和星星，未经历下层城区生活，普遍过着小资生活，对<strong>雨幕区</strong>的乱象仅限于评头论足。</p>
+                    </li>
+                </ul>
+                
+                <h4>基底区（BASE DISTRICT）</h4>
+                <ul>
+                    <li><strong>物理环境与建筑：</strong>
+                        <p><strong>氛围：</strong> 踏入即感潮湿与压抑，甚至不如下城区宜居。</p>
+                        <p><strong>建筑功能与材料：</strong> 大多数建筑为城市基础运转而建，使用混凝土、钢材、防锈材料，尺寸巨大。</p>
+                        <p><strong>独特形态：</strong> 更像是一个巨大的不规则矩形，被“蠕虫般”的巨大通道钻入钻出，建筑占据的空间体积大于无建筑空间体积。</p>
+                        <p><strong>通风：</strong> 仅依靠大通风平层经过基底区的各路管线提供。</p>
+                        <p><strong>潮湿表现：</strong> 墙面长满青苔、管道滴水、地面湿滑、永久性水雾弥漫。</p>
+                    </li>
+                    <li><strong>光能科技与基础设施：</strong>
+                        <p><strong>无平台电梯：</strong> 基底区同样是扬斯克城唯二没有平台电梯的区域之一，因其构造过于复杂和拥挤，步行即可直接到达目的地。</p>
+                    </li>
+                    <li><strong>社会生态与居民生活：</strong>
+                        <p><strong>PSC巡查：</strong> PSC职员不愿前来巡查，新入职的“倒霉蛋”常被发配至此，引发不满情绪。</p>
+                        <p><strong>活动区域：</strong> 人类活动主要集中在基底区与下城区互相插入的部分以及基底区的上界区域。</p>
+                    </li>
+                </ul>
+                <p>（在此补充其他城区）。。。。。。</p>
+            </section>
+            </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>
+</file>
+
+<file path="pages/history.html">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设定 - 光能科技发展史</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar">
+            <button id="sidebar-toggle" title="切换导航栏">☰</button>
+            <h3>导航菜单</h3>
+            <ul>
+                <li><a href="../index.html">主页</a></li>
+                <li><a href="tech_core_LE.html">光能科技核心设定</a></li>
+                <li><a href="history.html">光能科技发展史</a></li>
+                <li><a href="city_structure_eco.html">上扬斯克城：结构与生态</a></li>
+                <li><a href="power_structure.html">社会与权力结构</a></li>
+            </ul>
+        </nav>
+
+        <main id="content">
+            <header>
+                <h1>光能科技发展史（147年视角）</h1>
+            </header>
+
+            <section>
+                <h3>史前史：谐振纪(~40-25亿年前)与大断层事件</h3>
+                <p>在约四十亿年前，一场永不停歇的宇宙级风暴。</p>
+                <p>宇宙背景谐振能量在此处显得格外显目</p>
+                
+                <h4>能量噪音：</h4>
+                <p>在谐振纪的年代，恒星正值其狂暴不羁的青年期，喷吐着高能粒子流与狂乱的电磁波。更为致命地，星球自身也患有“先天心律不齐”：其液态外核与固态内核的旋转完全失谐，产生了一个混乱而不稳定的磁场。这内外双重的因素，使得整个星球表面都笼罩在一层无形的、持续的<strong>“环境背景能量噪音”</strong>之中。对于试图聚合的原始有机分子而言，这片天地无异于一个永恒的量子搅拌机，任何秩序都将在诞生的瞬间被撕成碎片。</p>
+                
+                <h4>谐振生态：</h4>
+                <p>量子风暴的怒吼中，截然不同的生命体系——<strong>谐振生态</strong>——奇迹般地诞生了。</p>
+                <ul>
+                    <li>
+                        <h5>生产者：</h5>
+                        <p>作为整个生态的基石，<strong>谐振古菌</strong>演化出了生命史上最精妙的造物之一：一种原子级别的晶格结构。这并非武器，而是一种极致的<strong>被动防御</strong>。该晶格能与外界狂暴的能量噪音产生微妙的同频，如同一个量子级的调谐器，将致命的无序波动“梳理”成对自己无害的稳定谐振，从而在细胞内部开辟出一片微观的“宁静海”。它们成片生长，在远古的海底形成了广阔的、闪烁着幽光的<strong>“谐振菌毯”</strong>，是这个混沌世界中最初的秩序火种。</p>
+                    </li>
+                    <li>
+                        <h5>初级消费者：</h5>
+                        <p>这类生物无法自行创造秩序，便演化出了掠夺秩序的能力。它们如同覆盖着水晶甲胄的远古蠕虫，缓慢地啃食着谐振菌毯，其目的并非获取能量，而是将古菌的谐振晶格直接整合进自己的外壳，为自己披上一层“二手”的能量护盾。</p>
+                    </li>
+                    <li>
+                        <h5>捕食者：</h5>
+                        <p>谐振生态中的“猎手”。它们体内有特殊的器官，可以瞬间发出一道<strong>“失谐脉冲”</strong>。这道脉冲的频率与猎物外壳的稳定频率完全相反，能在命中瞬间瓦解其晶格护盾，使其在微秒内“秩序崩溃”，暴露出脆弱的有机组织。它们的捕食，是一场无声的频率战争。</p>
+                    </li>
+                    <li>
+                        <h5>顶级生态位：</h5>
+                        <p>谐振纪的泰坦。这些山峦般的巨兽在混沌深海中游弋，其庞大的身躯本身就是一个移动的、自洽的“绝对稳定场”。它们如“牧羊人”般，吸引并“放牧”着海量的谐振古菌在体表共生，形成活体菌毯。它们不需捕猎，只需周期性地吸收部分菌毯即可维生，是整个生态系统中一个活的、自给自足的移动神迹。</p>
+                    </li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>纪元的结束</h3>
+                <p>这个奇特而辉煌的生态，生也因能量噪音，亡也因能量噪音的消失。</p>
+                
+                <h4>“大静默”：</h4>
+                <p>经过数亿年的演化，母星的怒火渐渐平息，能量输出趋于稳定。星球内部失谐的地核，也在引力的约束下最终实现了同步。那笼罩全球的“能量噪音”逐渐消失了，世界迎来了前所未有的平静。然而，对于谐振生态而言，它们失去了存在的基石。谐振古菌因无“噪”，大面积死亡，整个生态链随之崩溃。一个辉煌的纪元迎来了它无声的黄昏。</p>
+                
+                <h4>“大断层事件” (~25亿年前):</h4>
+                <p>在谐振生态已奄奄一息之际，一场来自天外的灾难，为这个时代画上了休止符。一颗富含铁镍与稀有同位素的<strong>小行星</strong>，以一个刁钻的角度与本星球发生了<strong>掠射撞击</strong>。这场撞击并未毁灭星球，却发动了一场行星级的炼金术：</p>
+                <ol>
+                    <li><strong>地壳重熔与封印：</strong> 撞击引发了全球性的地幔柱活动，地表被数公里厚的新熔岩覆盖。这层“火成岩”将谐振纪的所有遗迹——包括那些正在沉降的生物残骸——彻底、永久地<strong>封印</strong>在了地壳深处。</li>
+                    <li><strong>生命化学的重置：</strong> 撞击体带来的全新化学元素与火山喷发的气体，彻底重构了海洋与大气的成分，为<strong>碳基生命</strong>的诞生创造了全新的温床。</li>
+                    <li><strong>历史断层的形成：</strong> 任何幸存的谐振生物在这场物理与化学的双重天灾中被彻底抹除。一个完整的生命纪元，连同其所有的演化痕迹，就此被从星球的历史中物理性地“删除”，形成了一个不可逾越的<strong>地质与生物学断层</strong>。</li>
+                </ol>
+
+                <h4>地质学的筛选——为何宝藏只在深海？</h4>
+                <p>谐振生态虽是全球性的，但只有海洋中的那部分遗产得以幸存。在“大断层事件”之后的数十亿年里：</p>
+                <ul>
+                    <li><strong>陆地是“侵蚀”的世界：</strong> 暴露在地表的陆地，持续遭受风雨侵蚀。陆生谐振生物的脆弱残骸，连同它们所在的岩层，被一同磨损、风化，最终化为尘土，被时间彻底抹去。</li>
+                    <li><strong>海洋是“沉积”的世界：</strong> 所有陆地的尘埃最终汇入海洋，在海底沉积。只有深海那隔绝氧气、压力恒定的环境，才能将谐振生物的残骸，尤其是结构坚固的海生种，一层层地覆盖、保护起来。海洋，是一个“保存记录”的地方。</li>
+                </ul>
+                <p>因此，并非宝藏只在海洋，而是<strong>只有海洋中的宝藏，才有机会穿过数十亿年的时光</strong>，呈现在后来者面前。</p>
+            </section>
+
+            <section>
+                <h3>缝合线与同位素</h3>
+                <p>“大断层事件”在埋葬旧世界的同时，也无意中留下了一把通往宝库的、锈迹斑斑的钥匙。</p>
+                <ul>
+                    <li>
+                        <h4>地质伤疤（板块撞击缝合线）：</h4>
+                        <p>撞击并未完全摧毁一块位于后来西北海下方的古老板块（即“古菌摇篮”）。它像一个粗暴的外科医生，将这块板块撕裂、推入深处，又用上涌的熔岩不完美地“缝合”。在这个过程中，一部分被熔化的、来自谐振纪的深层岩石，被高压“注射”进了上方正在冷却的新地壳的裂缝中，形成了一条从旧世界延伸至新世界的、独一无二的<strong>垂直混合岩脉</strong>。</p>
+                    </li>
+                    <li>
+                        <h4>宇宙尘埃（大断层同位素）：</h4>
+                        <p>那颗小行星，富含几种在本星球上储量微乎其微的<strong>稳定重同位素</strong>。这些“外来”的同位素，在那场撞击中与被注射上来的谐振纪岩石混合在了一起。这使得“缝合线”区域的地质信号，呈现出一种无法解释的异常。</p>
+                    </li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>理论奠基与秘密发现</h3>
+                <ul>
+                    <li><strong>001：</strong> 纪元元年。首次通过理论物理模型，确认“环境背景能量场”及“虚空共振结”现象的存在。</li>
+                    <li><strong>015-018：</strong> ULTE的前身，一家深海资源勘探公司，在西北海追寻一个无法解释的“大断层同位素”异常信号。该信号源于“大断层事件”中撞击体留下的独特痕迹。他们沿着这条信号指引的“板块撞击缝合线”（撞击留下的地质伤疤）进行钻探，意外地从深层岩芯中发现了地质年代倒错的“谐振纪”岩石样本，其中便包含了<strong>“谐振古菌”化石</strong>。</li>
+                    <li><strong>018：</strong> 在一次对样本的高能扫描实验中，研究人员偶然揭示了其无与伦比的催化特性。此发现被立即列为最高机密，“稀有宇宙矿物”的谎言开始构建。</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>技术爆炸与城市奠基 (021 - 090)</h3>
+                <ul>
+                    <li><strong>022：</strong> 首个高效、稳定的压缩塔原型诞生，能源投入产出比首次为正。</li>
+                    <li><strong>058：</strong> 在化石产地之上，上扬斯k城项目启动。城市的设计本身就是为了最大化开采和利用下方的“谐振核材料”。</li>
+                    <li><strong>090：</strong> 上扬斯克城核心区域初步建成。一个依赖于远古生命遗骸的赛博朋克巨城正式运行。</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>垄断固化与秘密战争 (091 - 147)</h3>
+                <ul>
+                    <li><strong>091-至今：</strong> 光能科技进入平台期，核心技术被ULTE严密封锁，社会阶级完全固化。</li>
+                    <li><strong>110：</strong> ULTE发现深海“谐振深渊”异常生态，秘密成立“鹦鹉螺”项目组，旨在实现“谐振古菌”的活体培育。</li>
+                    <li><strong>125：</strong> “鹦鹉螺”项目成功复活“谐振古菌”的关键基因，成果移交“柳叶刀”。</li>
+                    <li><strong>130-至今：</strong> “柳叶刀”开发出第一代“活体义体”，向顶级精英提供“生物共生”服务。阶级鸿沟从社会经济层面，正式延伸至生物结构层面。</li>
+                    <li><strong>147（当前）：</strong> 城市表面稳定，但ULTE与NWSCB的暗战愈演愈烈。积累了近一个半世纪的矛盾，已接近临界点。</li>
+                </ul>
+            </section>
+
+            </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>
+</file>
+
+<file path="pages/power_structure.html">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设定 - 社会与权力结构</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar">
+            <h3>导航菜单</h3>
+            <ul>
+                <li><a href="../index.html">主页</a></li>
+                <li><a href="tech_core_LE.html">光能科技核心设定</a></li>
+                <li><a href="history.html">光能科技发展史</a></li>
+                <li><a href="city_structure_eco.html">上扬斯克城：结构与生态</a></li>
+                <li><a href="power_structure.html">社会与权力结构</a></li>
+            </ul>
+        </nav>
+
+        <main id="content">
+            <header>
+                <h1>社会与权力结构</h1>
+            </header>
+
+            <section>
+                <h3>主要公司联合体：</h3>
+                <ul>
+                    <li>
+                        <p><strong>权力模糊：</strong> “公司联合体”和“政府”的概念在扬斯克城中变得杂糅和模糊，巨头企业拥有准政府权力。</p>
+                    </li>
+                    <li>
+                        <p><strong>已知核心成员企业：</strong></p>
+                        <ul>
+                            <li><strong>通用光能技术能源 (ULTE)：</strong> 垄断光能开采与加工、能源运输架构设计与开发（90%业务）。</li>
+                            <li><strong>西北海建设局 (NWSCB)：</strong> 垄断光能相关城建、共振设备依托结构、巨构、光轨等。</li>
+                            <li><strong>公共安全委员会 (PSC)：</strong> 主要负责安保、共振设施看守、城市维稳。</li>
+                            <li><strong>信息与通讯：</strong>
+                                <ul>
+                                    <li><strong>跨域网络公司 (Cross-Domain Network Corp)：</strong> 核心数字基础设施、通讯网络。</li>
+                                    <li><strong>扬斯克新闻 (Yansk News)：</strong> 主要新闻与信息发布。</li>
+                                </ul>
+                            </li>
+                            <li><strong>医疗：</strong>
+                                <ul>
+                                    <li><strong>柳叶刀 (The Lancet)：</strong> 高端私人医生及私人安保服务。</li>
+                                </ul>
+                            </li>
+                            <li><strong>娱乐与媒体：</strong>
+                                <ul>
+                                    <li><strong>光通传媒1998 (Guangtong Media 1998)：</strong> 娱乐内容制作与分发。</li>
+                                    <li><strong>扬斯克新闻 (Yansk News)：</strong> 兼顾新闻与部分媒体职能（可能偏官方宣传）。</li>
+                                </ul>
+                            </li>
+                            <li><strong>制造业与军事：</strong>
+                                <ul>
+                                    <li><strong>通用军事技术公司 (Universal Military Tech Co)：</strong> 军事装备研发与生产。</li>
+                                    <li><strong>数字设计架构技术公司 (Digital Design Architecture Tech Co)：</strong> 高级数字设计、架构技术（可能涵盖机器人、AI、精密制造等）。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h4>成员介绍：</h4>
+
+                <h5>公共安全委员会（PSC）</h5>
+                <p>公共安全委员会（PSC）是上扬斯克城最庞大、最复杂的权力机构。其公开宣称的职责是“维护城市治安，监视一切危害公共安全的事件，保卫城市的基础稳定”。然而，PSC的实际定位远比一个单纯的维稳机构要复杂。它并非完全听命于公司联合体的任何一方，而是在ULTE与NWSCB的长期对峙中，找到了自己的生存空间，并乐于通过维持双方的互相掣肘来攫取稳定且不菲的利益，成为了事实上的“第三权力”。</p>
+                <p>PSC的组织概念对普通市民而言是模糊且无处不在的。一个在地方街区巡逻的职员、一个驾驶飞车巡视的交管、一组负责暗中行动的机动小组，或是一队设施安保小队，都隶属于PSC的管辖范围。其功能性分部繁多且高度分化，构成了一个臃肿、权力交错、内耗严重的巨型官僚集合体。</p>
+                
+                <h6>一、 城市治安总局 (Metropolitan Security Directorate)</h6>
+                <p>作为PSC公开的“面孔”，该总局负责处理城市日常治安，是市民最常接触到的力量。</p>
+                <ol>
+                    <li><strong>巡警处 (Patrol Division):</strong> 负责各城区的街面、平台与栈道的徒步及载具巡逻。其人员构成最为复杂，装备多为基础制式，是PSC内部伤亡率与内部腐败问题最为显著的部门。</li>
+                    <li><strong>交通管制科 (Traffic Control Section):</strong> 驾驶飞车进行空中巡视，处理空中交通违章与事故。由于能频繁接触到中上层市民，被视为一个油水丰厚的岗位。</li>
+                    <li><strong>刑事调查处 (Criminal Investigation Division):</strong> 由便衣警探组成，负责处理谋杀、抢劫等恶性刑事案件。然而，当案件调查牵扯到公司利益时，其权限常会受到来自上层的直接干预。</li>
+                    <li><strong>区域分局体系 (District Precincts):</strong> 在十大城区（尤其在中下层）设立的数十个分局，由“地方长官”负责。这些分局拥有一定的辖区自治权，在管理日常事务的同时，也常常与地方帮派势力维持着一种心照不宣的默契。</li>
+                </ol>
+
+                <h6>二、 特别行动司令部 (Special Operations Command)</h6>
+                <p>作为PSC隐藏在阴影中的“利剑”，该司令部负责处理高风险事件和执行各类秘密任务。</p>
+                <ol start="5">
+                    <li><strong>机动响应队 (Mobile Response Teams - MRT):</strong> PSC的精锐战术力量，负责处理武装冲突、人质危机和恐怖袭击等高烈度事件。成员装备精良，训练有素。</li>
+                    <li><strong>外勤特派处 (Field Dispatch Division):</strong> 负责执行秘密监视、情报刺探和卧底任务的特工部门。其成员通常以个人或小组形式行动，承受着巨大的心理压力，身份极少公开。</li>
+                    <li><strong>反情报科 (Counter-Intelligence Section):</strong> 专门负责审查并清除安插在PSC及城市各大机构中的企业间谍或反抗组织成员。这是一个内部充满猜忌和偏执的部门。</li>
+                    <li><strong>渗透与破坏分队 (Infiltration & Sabotage Units):</strong> 一个在官方记录中不存在的非公开部门。负责执行暗杀、绑架、定向破坏等非法任务，是高层处理“脏活”的工具。</li>
+                </ol>
+
+                <h6>三、 战略设施防卫总署 (Strategic Facilities Defense Agency)</h6>
+                <p>作为PSC的“坚盾”，该总署负责保卫城市的能源与交通命脉，对技术水平和人员忠诚度的要求极为严苛。</p>
+                <ol start="9">
+                    <li><strong>共振核心卫戍队 (Resonance Core Garrison):</strong> 守卫主压缩塔的精英部队。成员几乎与世隔绝，长期生活在强谐振场环境中，并被要求强制植入“共振场适应性植入件”。</li>
+                    <li><strong>网络节点防卫科 (Network Node Defense Section):</strong> 负责守卫遍布全城的共振中继站。由于防御力量分散，其驻点是能量盗采者和破坏者最常攻击的目标。</li>
+                    <li><strong>能源管线巡查队 (Energy Pipeline Patrols):</strong> 负责巡逻保护绵长的光能共振管道，任务单调且危险性高。</li>
+                    <li><strong>公共枢纽安保处 (Public Hub Security Division):</strong> 负责大型交通枢纽、垂直广场等重要公共空间的安全与人群疏导。</li>
+                </ol>
+
+                <h6>四、 中央情报与督查局 (Central Intelligence & Oversight Bureau)</h6>
+                <p>作为PSC的“大脑与神经中枢”，该局负责信息处理、内部监察和战略决策。</p>
+                <ol start="13">
+                    <li><strong>数据分析中心 (Data Analysis Center):</strong> 负责处理和监控全城的通讯数据与监控影像，是城市庞大监视网络“天眼”的实际掌控者。</li>
+                    <li><strong>内部事务督查处 (Internal Affairs & Oversight Division):</strong> 名义上负责调查PSC内部的腐败和违纪行为，但其更重要的秘密职能是确保所有部门的行动都符合PSC自身的最高利益。他们是所有PSC职员畏惧的对象。</li>
+                    <li><strong>企业联络办公室 (Corporate Liaison Office):</strong> PSC的核心部门，由顶级的政治博弈者组成。专门负责与ULTE和NWSCB进行沟通、摩擦和交易。PSC能够“坐收渔利”的关键正在于此，他们通过向双方有选择性地贩卖情报、默许对方的秘密行动，来换取巨额资金、先进技术和稳固的政治地位。</li>
+                    <li><strong>后勤与技术保障处 (Logistics & Technical Support Division):</strong> 负责PSC庞大机构的装备研发、采购、维护和分发。这里是各部门装备差异化的源头，其管理上的漏洞也使其成为黑市上PSC流出装备的主要来源。</li>
+                </ol>
+
+                <h5>跨域网络公司 (CDNC)</h5>
+                <p><em>“连接一切，洞悉一切。”</em></p>
+                <p>CDNC的崛起，本质上是一场对城市“神经系统”的精准寄生。在城市建设初期，ULTE和NWSCB专注于能源与结构的宏大叙事，将通讯视为次级配套。CDNC的创始人——一群被主流互联网公司排挤的数据工程师——敏锐地意识到，“光能共振”技术不仅能传输能量，其稳定的谐振频率本身就是完美的、几乎无损耗的信息载体。</p>
+                <p>他们开发的“光子通讯协议”（Photonic Communication Protocol）可以直接将数据编码到遍布城市的光能共振管道的“背景波纹”中，无需铺设独立的、昂贵的光缆网络。CDNC与当时急于推广其能源网络的<strong>ULTE</strong>达成了魔鬼协议：CDNC帮助ULTE优化其能源调度算法，作为回报，ULTE允许CDNC的通讯协议在所有新建的光能管道中运行。</p>
+                <p>这一战略让CDNC获得了无与伦比的物理优势，其网络“跨域通网”（Cross-Domain Network）随着ULTE的能源管道一同生长，深入城市的每一个角落。当其他公司还在为高昂的基建成本挣扎时，CDNC已经完成了对城市的“神经覆盖”。如今，即使是下城区黑帮私自搭建的、用于内部通信的“暗网”，其最底层的物理信号传输，依然绕不开CDNC的“背景波纹”。他们不生产信息，但他们是所有信息的唯一“河流”。</p>
+                <p><strong>CDNC是城市中最危险的“中立者”。</strong></p>
+                <ul>
+                    <li><strong>对PSC：</strong> CDNC是PSC“天眼”系统的外包服务商。PSC需要通过CDNC的網絡端口监控全城，但CDNC以“数据中立”为由，对所有数据请求收取天价服务费，并要求PSC签署复杂的授权协议。暗地里，CDNC内部的一个秘密部门“数据资产部”，会有选择性地将“脱敏”后的数据包卖给PSC的情报机构。</li>
+                    <li><strong>对ULTE与NWSCB：</strong> CDNC为双方的“接口战争”和“数据投毒”提供战场和工具。它向ULTE出售网络流量分析服务，帮助其评估“弥散协议”的试点效果；同时又向NWSCB提供结构数据传输的加密信道，以支持其“方舟协议”的开发。CDNC乐于见到双方的斗争，因为斗争越激烈，对网络服务的需求就越旺盛。</li>
+                </ul>
+                <p><strong>可衍生的矛盾点：</strong> CDNC的垄断地位是其最强大的武器，也是其最脆弱的命门。整个城市对“跨域通网”的过度依赖，意味着一旦其核心服务器遭遇物理或网络攻击，整个扬斯克城都将陷入信息瘫痪——这对于“盗频者”或“结构蛀虫”等组织而言，是极具诱惑力的终极目标。</p>
+
+                <h5>扬斯克新闻 (Yansk News)</h5>
+                <p><em>“秩序的声音，稳定的基石。”</em></p>
+                <p><strong>PSC的宣传喉舌。</strong> 扬斯克新闻名义上是独立媒体，但其创始资本有90%来自PSC的秘密注资，董事会中超过一半的席位由PSC“中央情报与督查局”的前任官员掌控。</p>
+                <p>负责发布城市官方新闻、天气预报（通常经过美化）、PSC的治安通告以及对公司联合体的正面宣传。其新闻内容经过严格审查，任何不利于城市“稳定”的负面消息都会被过滤或歪曲。他们制作的节目画面永远光鲜亮丽，聚焦于上城区的繁华和中层区的“奋斗故事”，而下城区的苦难则被描绘成“个别懒惰者的个人选择”。</p>
+                <p>它是PSC进行社会舆论管理的关键工具，用以麻痹民众，掩盖日益激化的社会矛盾。然而，其内部仍有一小撮怀揣新闻理想的“老派”记者，他们利用职务之便，秘密收集那些被禁止报道的真相，并将其泄露给底层的地下电台或信息贩子，时刻游走在被“内部事务督查处”清洗的边缘。</p>
+
+                <h5>光通传媒1998 (Guangtong Media 1998)</h5>
+                <p><em>“为你重构一个更好的现实。”</em></p>
+                <p><strong>NWSCB的文化与社会工程部门。</strong> 这是一个看似意外、实则逻辑严密的依附关系。NWSCB建造了城市的物理外壳，但如何让居民，尤其是中下层居民，安于居住在这些拥挤、压抑的“鸽子笼”里？答案就是精神麻醉。光通传媒1998就是为此而生的。</p>
+                <p>制作和分发超现实的沉浸式虚拟体验（VR/AR），即“梦境剧场”。这些“梦境”的内容大多是经过美化的、对辉光纪元前自然风光和田园生活的模拟，或是奢华的上层生活体验。其目的在于为中下层民众提供一个廉价的、逃避现实的“奶头乐”出口，消磨他们的反抗意志。其名称中的“1998”正是为了唤起一种被虚构出的、从未存在过的“黄金时代”的乡愁。</p>
+                <p>光通传媒是维护社会“稳定”的另一根支柱，它用虚拟的满足感掩盖了现实的痛苦。但副作用是，大量居民沉迷于虚拟世界，导致现实世界的生产力下降和人际关系淡漠。“回味市场”和“梦市回收食”等地下产业，正是其技术泄露和滥用的结果。此外，一些技术高超的黑客（可能与“盗频者”有关）会制作非法的“噩梦补丁”，侵入官方梦境，植入反映现实残酷的恐怖景象，试图以此唤醒沉睡的民众。</p>
+
+                <h5>通用军事技术公司 (UMT) 与 数字设计架构技术公司 (DDAT)</h5>
+                <p><em>一个问题的两面，同一母体的“兄弟”。</em></p>
+                <p>两者最初都<strong>起源于NWSCB</strong>。在城市建设的暴力扩张期，NWSCB需要自己的武装承包商来清理地盘、镇压反抗（通用军事技术公司的前身），也需要顶级的软件公司来设计复杂的城市建筑模型和自动化维护系统（数字设计架构技术公司的前身）。</p>
+                <p><strong>分化与现状：</strong></p>
+                <ul>
+                    <li><strong>通用军事技术公司 (UMT)：</strong> 在PSC成立后，NWSCB的私人武装被“收编”，UMT名义上成为PSC的主要装备供应商，但其深层控制权和技术专利仍掌握在NWSCB手中。这导致PSC的装备更新换代常常受制于NWSCB的脸色。UMT自己也乐于这种模糊地带，他们一边向PSC提供制式装备，一边将“次品”或“淘汰品”通过港口联合的渠道卖到黑市，实际上是在“武装”和“镇压”两头同时赚钱。</li>
+                    <li><strong>数字设计架构技术公司 (DDAT)：</strong> 随着业务的发展，DDAT的AI算法、机器人技术和虚拟建模能力已经远远超出了建筑设计的范畴。它们渴望独立，不再只做NWSCB的“软件部”。因此，DDAT开始秘密<strong>向ULTE靠拢</strong>，为其“弥散协议”提供关键的AI能源调度算法支持，试图以此换取ULTE的资本注入和政治庇护，最终摆脱NWSCB的控制。这场“叛逃”正在进行中，是公司层面最高级别的机密之一。</li>
+                </ul>
+
+                <h5>柳叶刀 (The Lancet)</h5>
+                <p><em>“超越凡躯，预定永恒。”</em></p>
+                <p><strong>ULTE的高级附属实验室与“生命资产”管理部门。</strong> 柳叶刀的尖端医疗技术，如光子再生疗法、基因编辑、记忆剪辑等，都高度依赖ULTE提供的超高纯度、稳定频率的光能。它实际上是ULTE研究光能对生物体影响的延伸，并将研究成果商业化，服务于顶层精英。</p>
+                <p>为日光区和上城区的客户提供昂贵的、持续性的生命维持与机体优化服务。这包括但不限于：延缓细胞衰老、定制化器官培育与替换、神经系统超频、记忆备份与管理。他们的服务并非一劳永逸的“治疗”，而是一种需要终身支付的天价“订阅服务”。 这直接导致了扬斯克城事实上的<strong>生命周期鸿沟</strong>：上层精英通过柳叶刀的服务，可以在长达百年的时间里将自己的身体机能维持在生理巅峰状态，享受着极高质量的健康生活；而中下层居民因恶劣环境、高压工作和匮乏的医疗资源，生理衰败速度远超自然规律，平均期望寿命可能只有上层精英的一半。</p>
+                <p>柳叶刀是城市阶级固化的生物学体现。它将生命和健康彻底商品化，制造了两个无法跨越的阶级现实。<strong>其许多前沿技术的临床试验，都是在下城区通过绑架、欺骗等手段，在无辜居民身上秘密进行的。</strong> 对于柳叶刀的研究部门而言，下层居民的健康与生命被视为其研发过程中可消耗的“生物资源”。 同时，对于无法继续支付其昂贵服务费用的客户，柳叶刀的“资产回收队”会毫不留情地停掉其植入体的维生功能，并强制回收其高性能的义体器官用于“再利用”。这一冷酷的商业模式，是许多精英阶层内部恐惧与猜忌的根源。</p>
+
+                <h4>内部关系</h4>
+                <h5>核心博弈：共生侵蚀 (Symbiotic Corrosion)</h5>
+                <p>通用光能技术能源 (ULTE) 与西北海建设局 (NWSCB) 的关系是整个公司联合体权力结构的核心。前者是供应能量的“心脏”，后者是构建城市的“骨骼”。它们早年因共同利益而合作，但在城市建成、垄断形成后，关系演变为一种无法分离、却又互相侵蚀的“冷战”状态。</p>
+                <p>这场战争并非公开的武装冲突，而是无声地发生在城市的每一条线路、每一块结构板、每一个能源接口上。这是一场围绕<strong>“技术标准”</strong>与<strong>“数据协议”</strong>的、以合作为伪装的慢性排异反应。双方都试图在维持表面平衡的同时，将自己的技术标准植入城市肌体，以在未来彻底架空对方。</p>
+                
+                <h5>三层博弈结构：以“苍穹之镜”项目为例</h5>
+                <p>这场“共生侵蚀”的博弈，通常在一个具体的城市项目中，以三个相互嵌套的层面展开。以上中城区“苍穹之镜”（Azure Mirror）住宅塔楼项目为例：</p>
+                <ul>
+                    <li><strong>表层 - 代理人战争 (Proxy War):</strong> 在公开招标阶段，项目的子合同（如内部管线、安保系统）会由一系列看似独立的中小公司竞标。但其中大部分背后都有ULTE或NWSCB的资本注入。这是一场围绕着谁能拿下更多城市“神经末梢”控制权的战争。</li>
+                    <li><strong>中层 - 接口战争 (Interface War):</strong> 在设计与施工阶段，双方会试图将自己的“私有协议”变成建筑的“操作系统”。ULTE会推行其专有的“谐振频率协议”，要求使用其指定的光能接收模块；而NWSCB则会坚持使用需要特定“结构应力反馈”的专利建筑材料。每一次技术对接，都是一次相互试探和渗透。</li>
+                    <li><strong>深层 - 维护战争 (Maintenance War):</strong> 项目竣工后的长期维护合同是真正的战利品。谁拿到维护权，谁就能在未来几十年里，名正言顺地渗透进对方的系统中。ULTE的工程师可以借口“能源线路检查”来分析NWSCB的结构数据；NWSCB的技术员也能以“结构安全评估”为名，扫描ULTE的能源波动频率。这是一场以“维护”为名的漫长信息窃取战。</li>
+                </ul>
+
+                <h5>NWSCB的反制：多维度战略：</h5>
+                <p>面对ULTE以“自适应谐振电网2.0”为代表的技术渗透（即以提供高效能为诱饵，实则窃取NWSCB核心结构数据），NWSCB启动了三个层面的同步反制，分别对应短期、中期和长期的战略目标。</p>
+                <h6>一、短期止损：“数据投毒”行动 (Operation Miasma)</h6>
+                <p>针对ULTE的数据窃取，NWSCB的秘密技术团队并非暴力破解协议，而是从源头污染数据。他们通过激活建筑内的压电复合材料层，制造出大量无害但异常的“结构应力噪音”，并调整外墙材料导热率以模拟“伪能量耗散区”。</p>
+                <p>此举旨在用海量垃圾数据冲击ULTE的算法模型，使其逐渐失效，从而保护自身的核心技术机密。而对塔楼居民造成的电梯运行异常、恒温系统失调等“小故障”，在NWSCB看来是“可接受的运行损耗”。</p>
+                
+                <h6>二、中期夺权：“方舟”标准协议 (Ark Protocol)</h6>
+                <p>为了从根本上改变游戏规则，NWSCB联合其他非能源类巨头，共同发起“城市安全与结构完整性统一接口标准”倡议，内部代号“方舟协议”。</p>
+                <p>该协议旨在将城市的基础结构确立为最高权限的“操作系统”，而能源、通讯等系统都必须作为低权限的“应用程序”接入。这将迫使ULTE的能源协议只能向NWSCB的“操作系统”“申请”经过净化和打包的标准化数据，从而一劳永逸地杜绝技术渗透，并将NWSCB从“骨骼”提升为城市的“中枢神经系统”。</p>
+                
+                <h6>三、长期威慑：“回声”传感器网络 (Echo Sensor Network)</h6>
+                <p>这是NWSCB早已布下的暗棋。多年以来，他们在为ULTE提供的所有核心基础设施（如压缩塔基座）的特种复合材料中，都预埋了一种“压电谐振微粒”。</p>
+                <p>这些微粒平时休眠，但在NWSCB维护人员的特定声波脉冲激励下，会根据周围的能量波动和长期应力，产生独特的“谐振回声”。通过分析这些回声，NWSCB可以反向推演出ULTE压缩塔的真实运行功率、“谐振核材料”的衰变率等核心机密。这张网络的存在本身就是一种强大的战略威慑。</p>
+
+                <h5>ULTE的釜底抽薪：弥散协议 (The Aether Protocol)</h5>
+                <p>面对NWSCB的多维度反制，ULTE的最终解决方案是废弃整个战场，在更高维度上建立新规则。他们启动了“弥散协议”的研发，旨在进行一场彻底的能源范式革命。</p>
+                <ul>
+                    <li><strong>核心理念：</strong> 彻底抛弃对物理“光能共振管道”的依赖，将整个扬斯克城变成一个巨大的、无形的“能源场域”。</li>
+                    <li><strong>技术实现：</strong> 主压缩塔不再向管道“输送”能量，而是向整个城市空间“广播”一种“基底谐振波”。所有用能设备都必须安装ULTE的“谐振汲取模块”，按需向场域请求能量，实现无线、精准的能源供给。</li>
+                    <li><strong>战略打击：</strong> 该协议一旦成熟，将使NWSCB建造的能源管线系统一夜之间变为废铁，彻底终结“接口战争”；同时，能源将绕过物理结构，变成一种“环境参数”，使NWSCB的“方舟协议”失去意义。ULTE将把垄断权从宏观基建，下沉到每一个微观的用能单位。</li>
+                </ul>
+
+                <h5>当前状态：军备竞赛</h5>
+                <p>然而，“弥散协议”存在巨大的技术瓶颈，其<strong>能量在空间广播过程中的耗散率和损耗率过大</strong>，导致其运行成本极高，无法进行大规模部署。目前，该协议仅处于<strong>定点研发和极小范围的试点使用阶段</strong>。</p>
+                <p>这使得双方的博弈，转变为一场关于“未来标准”的军备竞赛。ULTE必须在NWSCB通过“方舟协议”彻底掌控城市结构标准之前，解决能源损耗问题。反之，NWSCB则必须在“弥散协议”成熟前，完成对城市物理层面的绝对控制。</p>
+
+                <h5>PSC与其他公司的互动</h5>
+                <p>这些合法企业与PSC的互动，是围绕着<strong>控制、利益交换与相互制衡</strong>展开的。</p>
+                <h6>跨域网络公司 (CDNC)</h6>
+                <ul>
+                    <li><strong>数据分析中心 (13):</strong> <strong>表层合作，深层博弈。</strong> CDNC是该中心最大的数据供应商，但提供的数据都经过“防火墙”过滤。中心的技术专家终日都在尝试破解CDNC的加密协议，以获取原始数据流，而CDNC则享受着这场技术猫鼠游戏。</li>
+                    <li><strong>企业联络办公室 (15):</strong> <strong>高层对接。</strong> 所有官方数据请求、服务合同和法律纠纷都在此进行谈判。这是双方高层进行政治交易的场所，充满了虚伪的客套和尖锐的利益交换。</li>
+                    <li><strong>反情报科 (7):</strong> <strong>秘密敌对。</strong> 该部门视CDNC为城市最大的安全隐患，始终怀疑其向ULTE或NWSCB出售敏感信息。他们会秘密策反CDNC的员工，或尝试进行网络渗透，但往往因技不如人而失败。</li>
+                    <li><strong>网络节点防卫科 (10):</strong> <strong>被动依赖。</strong> 守卫中继站的卫兵需要依赖CDNC的网络进行通信和警报。CDNC有时会故意制造“网络延迟”，以提醒PSC谁才是“神经系统”的真正主人。</li>
+                </ul>
+                <h6>扬斯克新闻 (Yansk News)</h6>
+                <ul>
+                    <li><strong>中央情报与督查局 (14):</strong> <strong>绝对控制。</strong> 该局是扬斯克新闻的实际“总编辑”，决定了哪些新闻可以报道，以及报道的角度。新闻社社长每周都需向该局的特定联络官汇报工作。</li>
+                    <li><strong>刑事调查处 (3):</strong> <strong>互利共生。</strong> 调查处需要扬斯克新闻来宣传其“破案神速”，以提升公众形象和争取预算。因此，他们会有选择性地喂料给新闻社，而新闻社则帮助他们掩盖那些棘手的、无法侦破的案件。</li>
+                    <li><strong>区域分局体系 (4):</strong> <strong>单向利用。</strong> 地方分局的“地方长官”热衷于登上扬斯克新闻，将其作为政治资本。他们会主动邀请记者报道任何微不足道的“政绩”，例如修复了一个栈道护栏。</li>
+                </ul>
+                <h6>柳叶刀 (The Lancet)</h6>
+                <ul>
+                    <li><strong>企业联络办公室 (15):</strong> <strong>VIP通道。</strong> PSC的高层及其家属通过此办公室，以“安保合作”的名义，享受柳叶刀提供的折扣医疗服务。这是双方心照不宣的贿赂。</li>
+                    <li><strong>渗透与破坏分队 (8):</strong> <strong>黑暗共生。</strong> 这个不存在的部门是柳叶刀在下城区秘密实验的“保护伞”。作为回报，柳叶刀为该分队的特工提供能暂时屏蔽痛觉、强化反应的非法战斗药剂，并负责处理那些“任务中过度损伤”的特工身体。</li>
+                    <li><strong>巡警处 (1) (下城区):</strong> <strong>系统性腐败。</strong> 负责柳叶刀秘密实验室所在街区的巡警，每月都会收到一笔“环境风险补贴”。他们被告知不要理会该区域的“人口失踪”报告，也不要靠近那些有特殊生物危害标记的排水口。</li>
+                </ul>
+                <h6>通用军事技术公司 (UMT)</h6>
+                <ul>
+                    <li><strong>后勤与技术保障处 (16):</strong> <strong>主要客户与腐败温床。</strong> 这是UMT最大的官方买家。然而，该处的采购官员与UMT的销售经理勾结，通过虚报损耗、采购劣质替代品等方式侵吞预算。大量本应配发给PSC的精良装备，通过这条渠道直接流入了黑市。</li>
+                    <li><strong>机动响应队 (MRT) (5):</strong> <strong>终端用户与抱怨者。</strong> MRT是UMT最先进装备的使用者，但他们也最清楚这些装备的“后门”和缺陷。他们常常抱怨武器卡壳、护甲板以次充好，但申诉报告总是在后勤处石沉大海。</li>
+                </ul>
+
+                <h5>非官方组织与PSC的互动</h5>
+                <p>这些组织的生存之道，在于<strong>寻找PSC的执法盲区、腐败节点和内部矛盾</strong>。</p>
+                <h6>结构蛀虫 (Construct Mites)</h6>
+                <ul>
+                    <li><strong>战略设施防卫总署 (9, 10, 11):</strong> <strong>不死不休的死敌。</strong> 这些部门，特别是共振核心卫戍队，将清剿“蛀虫”视为最高使命。双方的对抗是纯粹的物理战争，充满了陷阱、爆炸和偷袭。</li>
+                    <li><strong>刑事调查处 (3):</strong> <strong>能力不足的追捕者。</strong> 该部门负责调查“蛀虫”造成的破坏，但他们习惯于应对普通刑事案，完全无法理解“蛀虫”以结构力学为武器的作案手法，调查往往陷入僵局。</li>
+                </ul>
+                <h6>盗频者 (Freq-Thieves)</h6>
+                <ul>
+                    <li><strong>网络节点防卫科 (10):</strong> <strong>直接对手。</strong> 卫兵们的主要工作之一，就是巡查并拔除“盗频者”们安装的非法“频率钓鱼”线圈。</li>
+                    <li><strong>数据分析中心 (13):</strong> <strong>高维猎手。</strong> “盗频者”中的顶尖黑客，与该中心的技术专家在网络空间进行着无声的战争。一方试图盗取权限，另一方则试图追踪其物理位置。</li>
+                    <li><strong>内部事务督查处 (14):</strong> <strong>非自愿线人。</strong> 督查处在抓获某些“盗频者”后，并不会将其公开移交法办，而是会胁迫他们，利用其技术秘密监控其他有腐败嫌疑的PSC部门。</li>
+                </ul>
+                <h6>港口联合 (The Port Union)</h6>
+                <ul>
+                    <li><strong>区域分局体系 (4) (港区):</strong> <strong>深度腐蚀。</strong> 港区的分局长官实际上是“港口联合”的“合伙人”。该分局的巡警负责维持联合控制区的“秩序”，驱赶不守规矩的小混混，并为联合的走私活动提供预警。</li>
+                    <li><strong>交通管制科 (2):</strong> <strong>选择性失明。</strong> 负责港区空域的飞车交管，会在特定时间段“校准设备”或“信号干扰”，为联合的走私飞车创造安全的起降窗口。贿金按时到账。</li>
+                    <li><strong>机动响应队 (MRT) (5):</strong> <strong>威慑力量。</strong> MRT是唯一能让“港口联合”感到忌惮的力量。联合会尽力避免与MRT发生正面冲突，但如果利益足够大，他们会通过内线提前获取MRT的行动部署，从而规避风险。</li>
+                </ul>
+                <h6>研讨会 (The Seminar)</h6>
+                <ul>
+                    <li><strong>企业联络办公室 (15):</strong> <strong>渗透与策反。</strong> “研讨会”的部分成员本身就是PSC高层的亲属或前同事。他们通过这个办公室，施加政治影响，推动有利于他们的政策，并安插自己的人员。</li>
+                    <li><strong>中央情报与督查局 (14):</strong> <strong>思想交锋。</strong> “研讨会”与该局中的“改革派”官员保持着秘密联系。他们共享对现状的不满，并探讨一种“更理性”的城市管理模式，这是一种极其危险的政治密谋。</li>
+                </ul>
+                <h6>空壳 (Hollows)</h6>
+                <ul>
+                    <li><strong>巡警处 (1) (下城区):</strong> <strong>麻烦制造者。</strong> 在巡警眼中，“空壳”是一群无法理解、行为诡异且有自毁倾向的疯子。处理他们举行的诡异仪式或清理实验失败的现场，是巡警们最不情愿的任务。</li>
+                    <li><strong>共振核心卫戍队 (9):</strong> <strong>高度警惕。</strong> 由于“空壳”的教义与共振塔有关，卫戍队将其列为高风险威胁，任何试图靠近压缩塔的“空壳”教徒都会被无警告射杀。</li>
+                </ul>
+
+            </section>
+
+            <section>
+                <h3>主要非官方组织</h3>
+                <p>在扬斯克城，台面上的权力博弈——通用光能（ULTE）、西北海建设局（NWSCB）与公共安全委员会（PSC）的三方制衡——仅仅是维持城市表面稳定的外壳。真正驱动城市底层暗流的力量，来自于一系列形态各异的非官方组织。这些组织是一个复杂、相互冲突的生态系统，是<em>城市肌体上不同病症催生出的多样化“抗体”与“寄生虫”</em>。</p>
+                <ul>
+                    <li><strong>结构蛀虫（Construct Mites）：</strong>技术原教旨主义破坏者。该组织认为光能悬浮城市本身即是错误，致力于通过对核心结构与能源节点的精确打击，最终促成城市的物理性“沉降”与毁灭。</li>
+                    <li><strong>盗频者（Freq-Thieves）：</strong>技术民粹主义者与能源“罗宾汉”。一个由黑客和技术人员组成的松散网络，他们破解并盗用垄断企业的光能网络，旨在为底层民众提供免费或廉价的能源，信奉能源公有化。</li>
+                    <li><strong>港口联合 (The Port Union)：</strong>黑商巨头。以港区为基地，通过半合法的物流公司外壳控制着城市大部分的走私与黑市贸易。他们是纯粹的利益驱动者，在各方势力的冲突中充当军火与情报贩子，是城市混乱的受益者。</li>
+                    <li><strong>研讨会 (The Seminar)：</strong>上层阶级的密谋者。一个由对现有权力结构不满的精英、学者和资本家组成的秘密团体。他们鄙视现行寡头的粗放统治，试图通过资本运作、信息战和政治渗透等非暴力手段，实现自上而下的权力更迭，建立一个更“理性”（虚伪）的技术官僚体系。</li>
+                    <li><strong>空壳 (Hollows)：</strong>寻求人体频率谐振“飞升”的技术邪教。他们坚信物理世界已无可救药，唯一的出路是将人类躯体谐振频率通过某种巫术调节至和空间同频，永生在宇宙空间中。为此，他们不择手段地进行非法人体实验、盗取光能频率资源，并将活人视为其实验的“原材料”。</li>
+                    <li><strong>史官（Historian）：</strong>历史与遗物的守护者。致力于发掘并保护 悬浮城市时代开始前和时代初期 工业遗迹的秘密团体。他们通常无害，但掌握着大量关于城市早期建设的、被遗忘的知识。当其认定的“历史遗址”受到威胁时，会利用这些知识进行干预。</li>
+                    <li><strong>光之律会（The Luminant Doctrine）：</strong>辉光纪元早期，在上扬斯克城建立前的荒芜年代，有少数人将“虚空共振结”的现象解读为“宇宙意志的显现”，认为光能是天启之力、纯粹秩序的具现。</li>
+                </ul>
+                <p>除此之外，还有许多未提及的势力与组织它们如同城市的影子，渗透于各个阶层，其行动和相互间的冲突，构成了城市中不可预测的关键变量，是任何行动都必须优先纳入演算的因素。</p>
+            </section>
+
+            </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>
+</file>
+
+<file path="pages/tech_core_LE.html">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设定 - 光能科技核心设定</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar">
+            <h3>导航菜单</h3>
+            <ul>
+                <li><a href="../index.html">主页</a></li>
+                
+                <li><a href="tech_core_LE.html">光能科技核心设定</a></li>
+                <li><a href="history.html">光能科技发展史</a></li>
+                <li><a href="city_structure_eco.html">上扬斯克城：结构与生态</a></li>
+                <li><a href="power_structure.html">社会与权力结构</a></li>
+            </ul>
+        </nav>
+
+        <main id="content">
+            <header>
+                <h1>光能科技核心设定</h1>
+            </header>
+
+            <section id="resonator">
+                <h3><strong>核心物理概念：共振结 (Resonator)</strong></h3>
+                <ul>
+                    <li>
+                        <p><strong>本质 - 背景能量的瞬时有序态</strong></p>
+                        <p><strong>虚空共振结：</strong> 此非传统物理粒子，而是遍布空间的“环境背景能量场”在微观尺度下，因量子涨落而自发形成的、瞬时存在的、高度有序的“能量拓扑结构”。其本身不具备质量，仅是一种能量在特定相位下的局部稳定形态。</p>
+                    </li>
+                    <li>
+                        <p><strong>不可观测性</strong></p>
+                        <p>在自然状态下，其振动频率与能量密度极低，与常规物质和电磁波几乎不发生相互作用，因此无法被直接观测。其存在仅能通过对背景能量场的精密扰动进行间接证明。</p>
+                    </li>
+                    <li>
+                        <p><strong>储量</strong></p>
+                        <p>理论上无限。其作为背景能量场的一部分，无处不在，但天然状态下极其弥散，无法直接利用。</p>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="tech-flow">
+                <h3><strong>核心技术流程：从“弥散”到“可用”</strong></h3>
+                <p><strong>步骤一：谐振吸引与同步 (Resonance Attraction & Synchronization)</strong></p>
+                <ul>
+                    <li><strong>机制：</strong> 通过“谐振核材料”（见后述）作为催化核心，辅以巨构级的外部能量场，共同生成一个特定的“环境能量谐振场”。此场如同一个能量漩涡，将指定空间内弥散的、无序的虚空共振结吸引、汇聚，并强制其内部的“共振相位”趋于同步。</li>
+                    <li><strong>状态：</strong> 此过程被称为“相态同步压缩”。被捕获的共振结进入“高能激发态”，其内部能量并未增加，但其有序性与能量密度被强制拔高，变得极不稳定。</li>
+                </ul>
+                <p><strong>步骤二：临界排斥与崩解 (Critical Repulsion & Collapse)</strong></p>
+                <ul>
+                    <li><strong>斥力机制：</strong> 当大量处于同步状态的共振结被压缩至临界距离时，其高度一致的“谐振场”会产生剧烈的“相位排斥效应”。这是一种源于能量结构层面的基础斥力，旨在抵抗外部施加的强制同步压力，回归无序的自然状态。</li>
+                    <li><strong>崩解原理：</strong> 当外部压缩场施加的“同步压力”超过了共振结内部结构所能维持的稳定阈值，排斥效应会瞬间撕裂其拓扑结构。这个过程被称为“相位失谐崩解” (Phase Desynchronization Collapse)。共振结不再能维持其有序形态，瞬间“解构”，回归为无序的背景能量。</li>
+                </ul>
+                <p><strong>步骤三：能量释放与捕获 (Energy Release & Capture)</strong></p>
+                <ul>
+                    <li><strong>光能释放：</strong> 在“相位失谐崩解”的瞬间，共振结从一个高度有序、高能量密度的状态，雪崩式地向无序、低能量密度的基态跃迁。根据能量守恒定律，这个过程中储存的、用于维持其有序结构的“位能”，会以纯粹的光子形式释放出来。这便是光能的核心来源。可见光的产生是此剧烈过程的必然伴随现象。</li>
+                </ul>
+            </section>
+
+            <section id="tech-application">
+                <h3><strong>核心技术应用</strong></h3>
+                <p><strong>定向脉冲推力 (Directed Pulse Thrust)</strong></p>
+                <ul>
+                    <li><strong>修正概念：</strong> 并非“恒力”，而是一种超高频的脉冲推力。</li>
+                    <li><strong>原理：</strong> 通过精密的“谐振波导器”，在共振结即将崩解的瞬间，对其进行非对称性的最终压缩。这导致其能量释放具有极强的方向性，形成一道高度集中的“光子脉冲”。</li>
+                    <li><strong>作用：</strong> 通过以赫兹（Hz）甚至千赫（kHz）为单位的频率，连续不断地引发“定向崩解”，形成一股宏观上表现为持续、稳定的推力。这类似于电影胶片通过快速播放静态帧来形成流畅的动态画面，是城市悬浮与飞车推进的基础。</li>
+                </ul>
+                <p><strong>低产量再生机制 (Low-Yield Regeneration)</strong></p>
+                <ul>
+                    <li><strong>修正原理：</strong> 此非能量的无中生有，而是符合熵增定律的、极其低效的“能量再有序化”过程。</li>
+                    <li><strong>机制：</strong> 共振结崩解后，其残留的“谐振波纹”会在极小的时空尺度内短暂存在。在极偶然的情况下，这些波纹会与周围的背景能量发生干涉，像一个无形的模具，诱导后者重新“凝结”成一个新的、不稳定的共振结。其效率极低，如同风吹过沙丘，偶然形成一个精致的沙堡，概率微乎其微，完全无法支撑工业级需求。</li>
+                </ul>
+            </section>
+
+            <section id="resonant-core-material">
+                <h3><strong>技术基石：谐振核材料 (Resonant Core Material)</strong></h3>
+                <ul>
+                    <li><strong>公开信息：</strong> 一种在极端宇宙环境下形成的、极其稀有的无机矿物。</li>
+                    <li><strong>最高机密：</strong> 一种在数十亿年前“谐振纪”灭绝的太古微生物——“谐振古菌” (Resonant Archaea) 的化石群。</li>
+                    <li>
+                        <p><strong>作用原理：</strong> “谐振古菌”化石本身不产生能量，其细胞在矿化后遗留下的独特晶格结构，是一种完美的<strong>“被动谐振催化剂”</strong>。</p>
+                        <ul>
+                            <li><strong>催化机制：</strong> 这种晶格结构能以极低的能耗，大幅降低“环境能量谐振场”的生成阈值。换言之，它使得人类能够用可以接受的能量输入，去撬动、规整庞大的背景能量场。没有它，生成同等强度的谐振场所需的能量将是天文数字，整个光能科技体系将因能量投入远大于产出而失去意义。</li>
+                            <li><strong>演化根源：</strong> 该晶格并非为“催化”而生，而是谐振古菌在远古时代为了对抗狂暴的“环境背景能量噪音”而演化出的<strong>被动防御机制</strong>。它如同一个量子层面的“减震器”，通过与环境同频，在细胞内部创造一个微观的“绝对稳定域”以求生存。人类的应用，本质上是<strong>逆向并放大了</strong>这种古老的防御本能，将其从被动的“稳定器”转变为主动的“能量放大器”。</li>
+                            <li><strong>结构唯一性：</strong> 谐振核材料之所以有效，关键在于其<strong>原子级别的三维空间拓扑结构</strong>，而非化学成分。这种源于生命演化的复杂几何构型，在极其苛刻的地质条件下，通过“分子置换石化过程”被完美复现。这是当前人类科技无法从零开始复制的。</li>
+                        </ul>
+                    </li>
+                    <li><strong>技术垄断的本质：</strong> ULTE的垄断，并非对能源的垄断，而是对一种<strong>“能量转换催化技术”</strong>的绝对垄断。没有这种“生物化石”，光能科技的能量转换效率将是负数，城市将从空中坠落。</li>
+                </ul>
+            </section>
+
+            <section id="light-energy-biology">
+                <h3><strong>光能科技的生物学</strong></h3>
+                <h4><strong>核心机密的生物学根源：“谐振古菌”的复活</strong></h4>
+                <p>光能科技的基石并非冰冷的矿石，而是远古生命的遗骸。这一事实决定了其最前沿的应用必然回归生物学领域。</p>
+                <ul>
+                    <li><strong>基因的复苏：</strong> ULTE的最高机密项目——位于基底区深处的“鹦鹉螺”深潜坞，其核心任务并非简单的生态研究。经过数十年对“谐振古菌”化石的研究，项目组成功从被完美矿化的化石中，提取并测序出了残缺的有机分子链。通过尖端的基因编辑与合成生物学技术，他们“复活”了古菌细胞内负责生成“谐振催化晶格”的关键基因片段。</li>
+                    <li><strong>垄断的深化：</strong> 这一突破意味着ULTE不再仅仅依赖挖掘化石，理论上已具备了“生产”谐振核材料的能力。这也是其子公司“柳叶刀”开发下一代生物科技的绝对基础。</li>
+                </ul>
+                <h4><strong>“谐振深渊”：被城市“喂养”的异常生态</strong></h4>
+                <p>城市基座下方，持续泄漏的“谐振波纹”并非无害的能量噪音，而是一种强大的、定向的“环境筛选压力”。</p>
+                <ul>
+                    <li><strong>进化加速器：</strong> 这些能量波纹渗透进西北海的深渊，对当地的微生物菌落施加了持续数十年的高频能量刺激。这并未“唤醒”休眠的古菌，而是诱导了某些具有潜力的远古菌株（谐振古菌的远亲）发生爆炸性的定向变异。</li>
+                    <li><strong>深海光合作用：</strong> 变异后的“谐振菌群”演化出了直接代谢“谐振波纹”的能力，将这种能量转化为自身生存所需的生物能。这是一种不依赖阳光的、基于光能科技的“深海光合作用”，形成了覆盖海床的、明暗闪烁的“菌毯”，成为整个“谐振深渊”生态系统的能量生产者。</li>
+                    <li><strong>原生生物的畸变：</strong> 生态链上层的生物，如“晶壳生物”，通过捕食菌毯，将这种谐振特性整合进了自己的身体。其体内的“生物谐振器官”，本质上是活体化的、不完美的“谐振核材料”，使其能够拟态隐形、发射冲击波，这是生物为了适应被科技污染的环境而演化出的畸形生存工具。</li>
+                </ul>
+            </section>
+
+            <section id="compression-towers-network">
+                <h3><strong>压缩塔与共振网络：城市级部署</strong></h3>
+                <h4><strong>压缩塔</strong></h4>
+                <p>将弥散于空气中的虚空共振结吸引、压缩，并进入高能激发状态，为城市提供悬浮、供能、传输、定向脉冲推力等功能。</p>
+                <h4><strong>结构剖面图层级（从外到内）</strong></h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>层级名称</th>
+                            <th>描述</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>外壳层</strong></td>
+                            <td><strong>环境隔离腔体：</strong> 抗腐蚀金属陶瓷复合壳，防止湿气或粒子干扰谐振场。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>散热层</strong></td>
+                            <td><strong>被动谐振缓冲层：</strong> 用于导出塔体压缩过程中产生的热共振副产能。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>主构层</strong></td>
+                            <td><strong>主谐振腔阵列：</strong> 多组“谐振柱体”按黄金螺旋排布，形成干涉场。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>核心层</strong></td>
+                            <td><strong>超临界压缩核心：</strong> 安置“谐振核材料”，是整个系统的能量收敛点。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>导引层</strong></td>
+                            <td><strong>定向波导器接口：</strong> 对接共振管网，用于输出压缩产生的光能或定向脉冲波。</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4><strong>运行流程</strong></h4>
+                <ol>
+                    <li><strong>谐振引发：</strong> 通过外部频率引导器生成“激活序列”，在谐振腔阵列中形成“初步环境能吸引场”。</li>
+                    <li><strong>压缩建立：</strong> 主谐振腔捕获虚空共振结，并通过多频干涉引导其进入高能状态，逐步压缩到临界密度。</li>
+                    <li><strong>能量收敛：</strong> 当压缩率达到设定值，核心层引导其进行“相位失谐崩解”，释放的能量进入城市共振网络或直接驱动悬浮装置。</li>
+                    <li><strong>再生期（非持续压缩型）：</strong> 系统进入低频释放状态，等待共振残波散去，防止过载。</li>
+                </ol>
+                <h4><strong>运行与维护机制</strong></h4>
+                <ul>
+                    <li>由公共安全委员会（PSC）主导技术保密与运行调度。</li>
+                    <li>维护人员需具备“共振场适应性植入件”，否则无法在核心层存活。</li>
+                    <li>中下城区常因维护预算不足，只能执行“外层壳体热交换修复”，无法处理主压缩问题。</li>
+                    <li>有传闻称某些底层塔体已被黑帮组织私下“反向调校”，用于定向能量劫持或制造“悬浮中断恐袭”。</li>
+                </ul>
+                <h4><strong>城市级压缩塔部署模型</strong></h4>
+                <p><strong>分区逻辑：</strong> 将整个上扬斯克城划分为多个“光能支撑扇区”，每个扇区由1～3座主压缩塔负责供能、浮力维持与共振频率稳定。</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>区域类型</th>
+                            <th>压缩塔数量</th>
+                            <th>特点</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>核心区（高层）</strong></td>
+                            <td>1～2</td>
+                            <td>单塔高能量密度，支撑塔尖区域浮空稳定。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>中层交通枢纽</strong></td>
+                            <td>2～3</td>
+                            <td>支持高速光轨、悬浮交通、区域照明等。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>下层重工业区</strong></td>
+                            <td>1</td>
+                            <td>常年超负荷运行，维护率低，事故频发。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>港口 / 城基区</strong></td>
+                            <td>特制塔体群</td>
+                            <td>功能偏向能源转输与浮空结构稳态修正。</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4><strong>部署规律（理论 vs 现实）</strong></h4>
+                <ul>
+                    <li><strong>理论布局（初建期）：</strong> 每500m半径布设一个塔心区域，形成多重重叠谐振带，避免频率盲区。中继站沿塔—塔之间构建成“光能导向骨架”。</li>
+                    <li><strong>实际问题</strong>： 塔间共振干涉严重，形成“相位噪音区”；塔体重构失败导致区域浮力下降；存在非法自建的“非许可塔体”。</li>
+                </ul>
+            </section>
+
+            <section id="relay-network">
+                <h3><strong>共振中继站网络结构</strong></h3>
+                <h4><strong>节点类型</strong></h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>类型名称</th>
+                            <th>功能</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>主中继站</strong></td>
+                            <td>汇集1~3座压缩塔能量并调频后分发。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>区域分发站</strong></td>
+                            <td>接收主中继站能量，根据街区负载自动调节频率。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>微中继站</strong></td>
+                            <td>嵌入建筑内，用于家庭、商铺、小型交通设备的供能对接。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>移动中继站（少见）</strong></td>
+                            <td>在中断时作为临时“飞行能量中枢”</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4><strong>部署方式</strong></h4>
+                <p>空间网格状部署，仿照大脑突触网络；垂直分层冗余机制，防止上下空间频率错乱。</p>
+                <h4><strong>城市级共振网络的常见故障</strong></h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>故障类型</th>
+                            <th>描述</th>
+                            <th>效果</th>
+                            <th>引发者</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>漂移故障</strong></td>
+                            <td>某塔频率失控。</td>
+                            <td>周边飞车失控、街道照明波动。</td>
+                            <td>技术事故、共振核劣化。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>谐振风暴</strong></td>
+                            <td>多塔频率共震。</td>
+                            <td>建筑结构震荡、部分悬浮建筑强制下降。</td>
+                            <td>武装恐袭、极端天气。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>共振耦合能量劫断</strong></td>
+                            <td>黑市团伙盗采。</td>
+                            <td>某区突发掉电、系统重启、数据清除。</td>
+                            <td>反叛组织。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>
+</file>
+
+</files>
