@@ -86,7 +86,7 @@ body.no-transition * {
 
 /* 主内容区 */
 #content {
-    margin-left: 50px; /* 为收起状态的侧边栏留出空间 */
+    margin-left: 100px; /* 为收起状态的侧边栏留出空间 */
     padding: 20px;
     max-width: 900px;
     transition: margin-left 0.3s ease-in-out;
@@ -94,7 +94,7 @@ body.no-transition * {
 
 /* 侧边栏展开时主内容区的样式 */
 body.sidebar-open #content {
-    margin-left: 280px;
+    margin-left: 350px;
 }
 
 /* 导航栏内容 */
