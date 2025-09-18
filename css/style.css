@@ -37,11 +37,11 @@ body.no-transition * {
 
 /* 侧边栏基础样式 - 现代标准交互 */
 #sidebar {
-    width: 250px;
+    width: 200px;
     height: 100vh;
     position: fixed;
     top: 0;
-    left: -220px; /* 默认收起，只露出30px的切换按钮区域 */
+    left: -240px; /* 默认收起，只露出30px的切换按钮区域 */
     background-color: #222;
     padding: 20px;
     z-index: 1000;
@@ -60,42 +60,51 @@ body.no-transition * {
     box-shadow: 3px 0 20px -3px rgba(0, 170, 255, 0.8);
 }
 
-/* 切换按钮 */
+/* 切换按钮容器 - 科幻梯形突出 */
 #sidebar-toggle {
     font-family: 'Arial', sans-serif;
     font-size: 20px;
     color: rgba(255, 255, 255, 0.5);
-    background: none;
+    background: linear-gradient(135deg, #333 0%, #2a2a2a 50%, #222 100%);
     border: none;
     cursor: pointer;
-    padding: 5px;
+    padding: 12px 8px;
     position: absolute;
-    top: 15px;
-    right: 7px;
-    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    top: 10px;
+    right: -45px; /* 向外突出 */
+    width: 45px;
+    height: 50px;
+    clip-path: polygon(0 0, 100% 15%, 100% 85%, 0 100%); /* 梯形斜切 */
+    border-right: 2px solid rgba(0, 170, 255, 0.3);
+    border-top: 1px solid rgba(0, 170, 255, 0.2);
+    border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+    box-shadow: 2px 0 10px rgba(0, 170, 255, 0.1);
+    transition: all 0.3s ease-in-out;
 }
 
 #sidebar-toggle:hover {
-    color: rgba(255, 255, 255, 0.8);
-    transform: scale(1.1);
+    color: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, #444 0%, #3a3a3a 50%, #333 100%);
+    border-right-color: rgba(0, 170, 255, 0.6);
+    box-shadow: 3px 0 15px rgba(0, 170, 255, 0.3);
+    transform: translateX(2px);
 }
 
 #sidebar.open #sidebar-toggle {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 1);
+    background: linear-gradient(135deg, #00aaff 0%, #0088cc 50%, #006699 100%);
+    border-right-color: rgba(0, 170, 255, 0.8);
+    box-shadow: 3px 0 20px rgba(0, 170, 255, 0.5);
 }
 
 /* 主内容区 */
 #content {
-    margin-left: 100px; /* 为收起状态的侧边栏留出空间 */
+    margin-left: 35px; /* 只为收起状态的侧边栏切换按钮留出空间 */
     padding: 20px;
     max-width: 900px;
-    transition: margin-left 0.3s ease-in-out;
 }
 
-/* 侧边栏展开时主内容区的样式 */
-body.sidebar-open #content {
-    margin-left: 350px;
-}
+/* 移除侧边栏展开时主内容区的样式变化 */
 
 /* 导航栏内容 */
 #sidebar h3 {
