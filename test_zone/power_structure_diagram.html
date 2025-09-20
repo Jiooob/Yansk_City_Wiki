@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扬斯克城权力关系图 (同心圆版)</title>
+    <style>
+        :root {
+            --color-background: #010409;
+            --color-text: #e6edf3;
+            --color-border-ui: #21262d;
+
+            /* 节点辉光颜色 */
+            --glow-ulte: #00d9ff;
+            --glow-nwscb: #9f8aff;
+            --glow-psc: #32a8ff;
+            --glow-independent: #db61a2;
+            --glow-unofficial: #ffb86c;
+
+            /* 连接线颜色 - 统一为浅灰色 */
+            --line-hostile: #888888;
+            --line-covert: #888888;
+            --line-control: #888888;
+            --line-alliance: #888888;
+            --line-transactional: #888888;
+            --line-corruption: #888888;
+            --line-cold-war: #888888;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        body {
+            margin: 0;
+            background: var(--color-background);
+            background-image: radial-gradient(ellipse at center, rgba(12, 20, 36, 0.8) 0%, var(--color-background) 70%);
+            color: var(--color-text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            cursor: grab;
+        }
+
+        .network {
+            position: absolute;
+            transform-origin: 0 0;
+        }
+
+        .node {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 10;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, var(--bg-color-inner, rgba(255,255,255,0.1)) 0%, var(--bg-color-outer, transparent) 70%);
+            box-shadow:
+                0 0 8px 1px var(--glow-color, white),
+                inset 0 0 10px 2px var(--glow-color, white);
+            filter: brightness(0.9);
+        }
+
+        .node:hover {
+            transform: scale(1.15);
+            z-index: 20;
+            filter: brightness(1.2);
+        }
+
+        .node-text {
+            line-height: 1.1;
+            padding: 5px;
+            text-shadow: 0 0 5px #000;
+        }
+
+        /* 尺寸分级 */
+        .core-major { width: 110px; height: 110px; }
+        .core-major .node-text { font-size: 14px; }
+        .major-corp { width: 90px; height: 90px; }
+        .major-corp .node-text { font-size: 13px; }
+        .minor { width: 70px; height: 70px; }
+        .minor .node-text { font-size: 11px; }
+
+        /* 阵营颜色 */
+        .ulte-faction { --glow-color: var(--glow-ulte); }
+        .nwscb-faction { --glow-color: var(--glow-nwscb); }
+        .psc-faction { --glow-color: var(--glow-psc); }
+        .independent { --glow-color: var(--glow-independent); }
+        .unofficial { --glow-color: var(--glow-unofficial); }
+
+        /* 连接线 */
+        .connection {
+            position: absolute;
+            transform-origin: left center;
+            z-index: 1;
+            height: 1px;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+        .connection::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 12px; /* 增大悬停区域到12px */
+            top: -6px; /* 居中对齐 */
+            left: 0;
+            background: transparent;
+            z-index: 2;
+        }
+        .connection::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 0 5px 1px var(--line-color, white);
+            opacity: 0.7;
+        }
+
+        .cold-war { background: var(--line-cold-war); --line-color: var(--line-cold-war); height: 2px; }
+        .hostile { background: var(--line-hostile); --line-color: var(--line-hostile); }
+        .covert { background: var(--line-covert); --line-color: var(--line-covert); }
+        .control { background: var(--line-control); --line-color: var(--line-control); }
+        .alliance { background: var(--line-alliance); --line-color: var(--line-alliance); }
+        .transactional { background: var(--line-transactional); --line-color: var(--line-transactional); }
+        .corruption { background: var(--line-corruption); --line-color: var(--line-corruption); }
+
+        /* UI 面板 */
+        .info-panel, .legend {
+            position: absolute;
+            background: rgba(13, 17, 23, 0.7);
+            border: 1px solid var(--color-border-ui);
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .info-panel { top: 20px; left: 20px; max-width: 280px; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+        .legend { bottom: 20px; right: 20px; font-size: 11px; }
+        .legend h4 { margin: 0 0 10px 0; font-weight: 500; }
+        .legend-item { display: flex; align-items: center; margin: 6px 0; }
+        .legend-line { width: 25px; height: 2px; margin-right: 10px; border-radius: 1px; }
+        .legend-color { width: 15px; height: 15px; border-radius: 50%; margin-right: 10px; filter: brightness(0.8); }
+        
+
+        /* ... 你的其他CSS ... */
+
+/* 拖拽过程中的样式反馈 */
+.node.dragging {
+    cursor: grabbing;
+    z-index: 1000;
+    transform: scale(1.2);
+    box-shadow: 0 0 25px 5px var(--glow-color, white);
+}
+
+/* 布局控制UI */
+.layout-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3fb950; /* Green for loaded */
+    box-shadow: 0 0 5px #3fb950;
+    margin-right: 8px;
+    transition: background-color 0.5s;
+}
+.status-indicator.saving {
+    background-color: #ffb86c; /* Yellow for saving */
+    box-shadow: 0 0 5px #ffb86c;
+}
+#status-text {
+    font-size: 11px;
+    color: #8b949e;
+    margin-right: auto;
+}
+#reset-layout-btn {
+    background: transparent;
+    border: 1px solid #c92a2a;
+    color: #ff8787;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+#reset-layout-btn:hover {
+    background: #c92a2a;
+    color: white;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="network" id="network" style="width: 2200px; height: 1800px;">
+
+            <div class="node core-major psc-faction" id="psc" style="left: 1045px; top: 620px;" data-info="公共安全委员会 (PSC) - 维持城市运转的第三方暴力机关，通过平衡ULTE与NWSCB的冲突攫取利益。">
+                <div class="node-text">公共安全委员会 PSC</div>
+            </div>
+            <div class="node core-major ulte-faction" id="ulte" style="left: 830px; top: 1020px;" data-info="通用光能 (ULTE) - 城市的“心脏”，垄断能源的超级企业，技术激进派。">
+                <div class="node-text">通用光能技术能源 ULTE</div>
+            </div>
+            <div class="node core-major nwscb-faction" id="nwscb" style="left: 1270px; top: 1020px;" data-info="西北海建设局 (NWSCB) - 城市的“骨骼”，垄断建筑与物理结构的巨头，作风保守。">
+                <div class="node-text">西北海建设局 NWSCB</div>
+            </div>
+
+            <div class="node major-corp independent" id="cdnc" style="left: 1055px; top: 350px;" data-info="跨域网络公司 (CDNC) - 垄断城市信息流的“神经系统”，危险的中立者，向所有势力出售服务。">
+                <div class="node-text">跨域网络公司 CDNC</div>
+            </div>
+            <div class="node major-corp psc-faction" id="yansk-news" style="left: 815px; top: 560px;" data-info="扬斯克新闻 - PSC的官方喉舌，负责舆论控制和信息审查。">
+                <div class="node-text">扬斯克新闻 Yansk News</div>
+            </div>
+            <div class="node major-corp ulte-faction" id="ddat" style="left: 600px; top: 800px;" data-info="数字设计架构技术 (DDAT) - 原属NWSCB，因理念不合正秘密向ULTE投靠，提供关键算法支持。">
+                <div class="node-text">数字设计架构技术公司 DDAT</div>
+            </div>
+            <div class="node major-corp ulte-faction" id="lancet" style="left: 600px; top: 1150px;" data-info="柳叶刀 (The Lancet) - ULTE的生物技术分支，为顶层精英提供生命延续服务，手段极其残酷。">
+                <div class="node-text">柳叶刀 The Lancet</div>
+            </div>
+            <div class="node major-corp psc-faction" id="mrt" style="left: 1295px; top: 750px;" data-info="机动响应队 (MRT) - PSC的精锐战术力量，处理高强度武装冲突。">
+                <div class="node-text">PSC-机动响应队 MRT</div>
+            </div>
+            <div class="node major-corp nwscb-faction" id="umt" style="left: 1500px; top: 850px;" data-info="通用军事技术 (UMT) - NWSCB的武器研发部门，名义上为PSC供货，实则受NWSCB远程控制。">
+                <div class="node-text">通用军事技术 UMT</div>
+            </div>
+            <div class="node major-corp nwscb-faction" id="guangtong" style="left: 1500px; top: 1150px;" data-info="光通传媒1998 - NWSCB的宣传与娱乐机构，通过制造虚拟“梦境”麻痹民众。">
+                <div class="node-text">光通传媒 GM1998</div>
+            </div>
+            
+            <div class="node minor unofficial" id="freq-thieves" style="left: 700px; top: 300px;" data-info="盗频者 - 能源“罗宾汉”，由黑客组成的松散网络，盗取公司能源分配给底层。">
+                <div class="node-text">盗频者 Freq-Thieves</div>
+            </div>
+            <div class="node minor psc-faction" id="intelligence" style="left: 900px; top: 200px;" data-info="中央情报与督查局 - PSC的大脑，负责情报分析、内部监察与政治博弈。">
+                <div class="node-text">PSC-中央情报与督查局 Intelligence</div>
+            </div>
+            <div class="node minor unofficial" id="historian" style="left: 1380px; top: 250px;" data-info="史官 - 城市历史的守护者，致力于保护旧时代遗迹，有时会因此与NWSCB发生冲突。">
+                <div class="node-text">史官 Historian</div>
+            </div>
+             <div class="node minor psc-faction" id="traffic" style="left: 1650px; top: 600px;" data-info="交通管制科 - PSC的空中力量，油水丰厚的部门，负责航道安全。">
+                <div class="node-text">PSC-交通管制科</div>
+            </div>
+            <div class="node minor unofficial" id="construct-mites" style="left: 1750px; top: 1000px;" data-info="结构蛀虫 - 技术原教旨主义破坏者，认为城市本身是错误，企图将其物理摧毁。">
+                <div class="node-text">结构蛀虫 Construct Mites</div>
+            </div>
+            <div class="node minor unofficial" id="seminar" style="left: 1400px; top: 1400px;" data-info="研讨会 - 由心怀不满的精英组成的秘密社团，试图通过非暴力手段实现权力更迭。">
+                <div class="node-text">研讨会 The Seminar</div>
+            </div>
+            <div class="node minor unofficial" id="hollows" style="left: 1065px; top: 1450px;" data-info="空壳 - 疯狂的技术邪教，相信通过与能源共振能实现肉体“飞升”。">
+                <div class="node-text">空壳 Hollows</div>
+            </div>
+            <div class="node minor unofficial" id="port-union" style="left: 650px; top: 1400px;" data-info="港口联合 - 黑市与走私贸易的实际掌控者，腐蚀了大量的PSC基层人员。">
+                <div class="node-text">港口联合 The Port Union</div>
+            </div>
+            <div class="node minor psc-faction" id="patrol" style="left: 400px; top: 1050px;" data-info="巡警处 - PSC最庞大也最腐败的部门，负责日常治安，与下层黑帮关系复杂。">
+                <div class="node-text">PSC-巡警处 Patrol</div>
+            </div>
+        </div>
+
+        <div class="info-panel" id="info-panel">
+            <h3 id="info-title" style="margin:0 0 10px 0;">选择一个节点</h3>
+            <p id="info-description" style="font-size: 13px; line-height: 1.5; margin: 0; color: #adbac7;">将鼠标悬停在节点上以查看详细情报。</p>
+        </div>
+
+        <div class="legend">
+            <h4>图例</h4>
+            <div class="legend-item"><div class="legend-line alliance"></div><span>合作/供应</span></div>
+            <div class="legend-item"><div class="legend-line control"></div><span>控制/从属</span></div>
+            <div class="legend-item"><div class="legend-line covert"></div><span>秘密合作</span></div>
+            <div class="legend-item"><div class="legend-line corruption"></div><span>腐败/交易</span></div>
+            <div class="legend-item"><div class="legend-line hostile"></div><span>公开敌对</span></div>
+            <div class="legend-item"><div class="legend-line cold-war"></div><span>冷战/竞争</span></div>
+        </div>
+        <div class="legend" id="legend">
+    <h4>图例</h4>
+    <div class="layout-controls">
+        <div class="status-indicator" id="status-indicator"></div>
+        <span id="status-text">布局已加载</span>
+        <button id="reset-layout-btn">重置布局</button>
+    </div>
+    <hr style="border-color: #21262d; margin: 10px 0;">
+        
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM元素获取
+    const network = document.getElementById('network');
+    const container = document.querySelector('.container');
+    const nodes = document.querySelectorAll('.node');
+    const infoPanel = document.getElementById('info-panel');
+    const infoTitle = document.getElementById('info-title');
+    const infoDescription = document.getElementById('info-description');
+    const resetButton = document.getElementById('reset-layout-btn');
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+
+    // 数据定义
+    const connections = [
+        ['ulte', 'nwscb', 'cold-war'], ['ulte', 'psc', 'transactional'], ['nwscb', 'psc', 'transactional'],
+        ['ulte', 'lancet', 'control'], ['ulte', 'ddat', 'covert'],
+        ['nwscb', 'umt', 'control'], ['nwscb', 'guangtong', 'control'], ['nwscb', 'ddat', 'control'],
+        ['psc', 'patrol', 'control'], ['psc', 'traffic', 'control'], ['psc', 'mrt', 'control'], ['psc', 'intelligence', 'control'], ['psc', 'yansk-news', 'control'],
+        ['cdnc', 'ulte', 'transactional'], ['cdnc', 'nwscb', 'transactional'], ['cdnc', 'psc', 'transactional'],
+        ['umt', 'psc', 'alliance'], ['umt', 'mrt', 'alliance'], ['umt', 'port-union', 'corruption'],
+        ['construct-mites', 'nwscb', 'hostile'], ['freq-thieves', 'ulte', 'hostile'], ['freq-thieves', 'cdnc', 'hostile'],
+        ['seminar', 'intelligence', 'covert'], ['hollows', 'ulte', 'hostile'], ['historian', 'nwscb', 'transactional'],
+        ['port-union', 'patrol', 'corruption'], ['port-union', 'traffic', 'corruption'], ['lancet', 'patrol', 'corruption'],
+    ];
+
+    // 关系详细信息数据
+    const relationshipDetails = {
+        'ulte-nwscb': '【共生侵蚀】ULTE与NWSCB的核心博弈：前者是能源"心脏"，后者是城市"骨骼"，双方展开无声的技术标准战争，试图在维持表面合作的同时彻底架空对方。',
+        'ulte-psc': '【利益交换】ULTE向PSC提供技术支持和资金，换取政策倾斜和执法便利，同时通过企业联络办公室进行政治博弈。',
+        'nwscb-psc': '【相互制衡】NWSCB与PSC维持复杂的合作关系，PSC需要NWSCB的基建支持，NWSCB需要PSC的安保服务，同时双方相互监督制衡。',
+        'ulte-lancet': '【技术依附】柳叶刀作为ULTE的高级附属实验室，其尖端医疗技术高度依赖ULTE提供的超高纯度、稳定频率的光能。',
+        'ulte-ddat': '【秘密叛逃】DDAT原属NWSCB，但正秘密向ULTE靠拢，为其"弥散协议"提供关键AI算法支持，试图摆脱NWSCB控制。',
+        'nwscb-umt': '【远程控制】UMT名义上为PSC供应装备，但其深层控制权和技术专利仍掌握在NWSCB手中，是NWSCB对PSC的制衡工具。',
+        'nwscb-guangtong': '【文化工程】光通传媒作为NWSCB的宣传部门，通过制造虚拟"梦境"麻痹民众，让他们安于居住在拥挤压抑的"鸽子笼"里。',
+        'nwscb-ddat': '【母子分化】DDAT原为NWSCB的软件部门，但随着业务扩展渴望独立，正在进行危险的"叛逃"，是公司层面的最高机密。',
+        'psc-patrol': '【基层控制】巡警处是PSC最庞大的基层部门，负责日常治安，但也是腐败问题最严重的部门。',
+        'psc-traffic': '【空中力量】交通管制科是PSC的空中执法力量，因能接触中上层市民而被视为油水丰厚的岗位。',
+        'psc-mrt': '【精锐武力】机动响应队是PSC的王牌战术力量，装备精良，负责处理高强度武装冲突。',
+        'psc-intelligence': '【大脑中枢】中央情报与督查局是PSC的核心，负责信息分析、内部监察和与企业的政治博弈。',
+        'psc-yansk-news': '【宣传喉舌】扬斯克新闻名义上独立，实际上90%资本来自PSC，是其舆论控制的重要工具。',
+        'cdnc-ulte': '【数据交易】CDNC向ULTE提供网络流量分析服务，帮助评估"弥散协议"试点效果，同时收取天价服务费。',
+        'cdnc-nwscb': '【技术支持】CDNC为NWSCB提供结构数据传输的加密信道，支持其"方舟协议"开发，从双方斗争中获利。',
+        'cdnc-psc': '【监控合作】CDNC是PSC"天眼"系统的外包服务商，以"数据中立"为由收取天价费用，同时暗中贩卖脱敏数据。',
+        'umt-psc': '【军火供应】UMT是PSC的主要装备供应商，但供应过程中存在严重腐败，大量装备流入黑市。',
+        'umt-mrt': '【终端用户】MRT使用UMT的先进装备，但也最清楚这些装备的缺陷和后门，双方关系复杂。',
+        'umt-port-union': '【黑市渠道】UMT通过港口联合将"次品"和"淘汰品"流入黑市，在武装和镇压两头同时获利。',
+        'construct-mites-nwscb': '【不死不休】结构蛀虫将NWSCB视为死敌，致力于摧毁其建筑结构，认为悬浮城市本身就是错误。',
+        'freq-thieves-ulte': '【能源劫掠】盗频者专门破解ULTE的能源网络，盗取光能分配给底层民众，是能源"罗宾汉"。',
+        'freq-thieves-cdnc': '【网络战争】顶尖黑客与CDNC的技术专家在网络空间进行无声战争，一方盗取权限，另一方追踪定位。',
+        'seminar-intelligence': '【内部渗透】研讨会与PSC情报局的"改革派"官员秘密联系，探讨"更理性"的城市管理模式。',
+        'hollows-ulte': '【疯狂敌意】空壳邪教视ULTE为阻碍"飞升"的障碍，经常袭击光能设施进行非法频率实验。',
+        'historian-nwscb': '【复杂关系】史官致力于保护历史遗迹，当NWSCB的建设威胁到遗址时会进行干预，关系时紧时缓。',
+        'port-union-patrol': '【深度腐蚀】港区巡警实际上是港口联合的"合伙人"，为其走私活动提供保护和预警。',
+        'port-union-traffic': '【选择性失明】交通管制科在特定时间"设备故障"，为港口联合的走私飞车创造安全窗口。',
+        'lancet-patrol': '【黑暗交易】巡警收受柳叶刀的"环境风险补贴"，对其在下城区的非法人体实验视而不见。'
+    };
+    
+    const LAYOUT_STORAGE_KEY = 'yanskLayoutV3';
+    let isNodeDragging = false;
+
+    // ===================================================================
+    // 核心逻辑执行顺序
+    // ===================================================================
+    loadLayout();
+    initializeConnections();
+    initializeNodeInteractions();
+    initializeDragAndDrop();
+    initializePanAndZoom();
+
+    // ===================================================================
+    // 函数定义
+    // ===================================================================
+
+    function saveLayout() {
+        statusIndicator.classList.add('saving');
+        statusText.textContent = '正在保存...';
+        const layout = {};
+        nodes.forEach(node => {
+            layout[node.id] = { x: node.offsetLeft, y: node.offsetTop };
+        });
+        localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(layout));
+        setTimeout(() => {
+            statusIndicator.classList.remove('saving');
+            statusText.textContent = '布局已保存';
+        }, 500);
+    }
+
+    function loadLayout() {
+        const savedLayout = localStorage.getItem(LAYOUT_STORAGE_KEY);
+        if (savedLayout) {
+            const layout = JSON.parse(savedLayout);
+            nodes.forEach(node => {
+                if (layout[node.id]) {
+                    node.style.left = `${layout[node.id].x}px`;
+                    node.style.top = `${layout[node.id].y}px`;
+                }
+            });
+            statusText.textContent = '布局已加载';
+        } else {
+            statusText.textContent = '使用默认布局';
+        }
+    }
+
+    resetButton.addEventListener('click', () => {
+        localStorage.removeItem(LAYOUT_STORAGE_KEY);
+        location.reload();
+    });
+
+    function initializeConnections() {
+        network.querySelectorAll('.connection').forEach(c => c.remove());
+        connections.forEach(([from, to, type]) => createConnection(from, to, type));
+    }
+
+    function createConnection(fromId, toId, type) {
+        const line = document.createElement('div');
+        line.className = `connection ${type}`;
+        line.style.cursor = 'pointer';
+        network.appendChild(line);
+        updateConnection(line, fromId, toId);
+
+        // 为关系线添加悬停事件
+        line.addEventListener('mouseenter', (e) => {
+            if (isNodeDragging) return;
+
+            // 生成关系键
+            const relationKey1 = `${fromId}-${toId}`;
+            const relationKey2 = `${toId}-${fromId}`;
+            const relationDetail = relationshipDetails[relationKey1] || relationshipDetails[relationKey2];
+
+            if (relationDetail) {
+                // 获取节点名称
+                const fromNode = document.getElementById(fromId);
+                const toNode = document.getElementById(toId);
+                const fromName = fromNode.querySelector('.node-text').textContent;
+                const toName = toNode.querySelector('.node-text').textContent;
+
+                // 更新信息面板
+                infoTitle.textContent = `${fromName} ↔ ${toName}`;
+                infoDescription.textContent = relationDetail;
+                infoPanel.style.opacity = '1';
+
+                // 高亮相关元素
+                network.style.filter = 'brightness(0.5)';
+                line.style.opacity = '1';
+                line.style.filter = 'brightness(1.5)';
+                fromNode.style.opacity = '1';
+                toNode.style.opacity = '1';
+                fromNode.style.filter = 'brightness(1.2)';
+                toNode.style.filter = 'brightness(1.2)';
+
+                // 降低其他元素的透明度
+                nodes.forEach(n => {
+                    if (n !== fromNode && n !== toNode) {
+                        n.style.opacity = '0.2';
+                    }
+                });
+
+                document.querySelectorAll('.connection').forEach(c => {
+                    if (c !== line) {
+                        c.style.opacity = '0.05';
+                    }
+                });
+            }
+        });
+
+        line.addEventListener('mouseleave', () => {
+            if (isNodeDragging) return;
+
+            // 恢复默认状态
+            infoPanel.style.opacity = '0';
+            network.style.filter = 'none';
+
+            nodes.forEach(n => {
+                n.style.opacity = '1';
+                n.style.filter = 'brightness(0.9)';
+            });
+
+            document.querySelectorAll('.connection').forEach(c => {
+                c.style.opacity = '0.4';
+                c.style.filter = 'none';
+            });
+        });
+    }
+
+    function updateConnection(line, fromId, toId) {
+        const fromElement = document.getElementById(fromId);
+        const toElement = document.getElementById(toId);
+        if (!fromElement || !toElement) return;
+        const fromX = fromElement.offsetLeft + fromElement.offsetWidth / 2;
+        const fromY = fromElement.offsetTop + fromElement.offsetHeight / 2;
+        const toX = toElement.offsetLeft + toElement.offsetWidth / 2;
+        const toY = toElement.offsetTop + toElement.offsetHeight / 2;
+        const dx = toX - fromX;
+        const dy = toY - fromY;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        line.style.left = `${fromX}px`;
+        line.style.top = `${fromY}px`;
+        line.style.width = `${length}px`;
+        line.style.transform = `rotate(${angle}deg)`;
+        line.dataset.from = fromId;
+        line.dataset.to = toId;
+    }
+
+    function redrawConnectionsForNode(nodeId) {
+        const affectedConnections = document.querySelectorAll(`.connection[data-from="${nodeId}"], .connection[data-to="${nodeId}"]`);
+        affectedConnections.forEach(line => {
+            updateConnection(line, line.dataset.from, line.dataset.to);
+        });
+    }
+
+    function initializeNodeInteractions() {
+        const allConnections = document.querySelectorAll('.connection');
+        nodes.forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                if (isNodeDragging) return;
+                const info = node.getAttribute('data-info');
+                const title = node.querySelector('.node-text').textContent;
+                infoTitle.textContent = title;
+                infoDescription.textContent = info;
+                infoPanel.style.opacity = '1';
+
+                const nodeId = node.id;
+                network.style.filter = 'brightness(0.5)';
+                node.closest('.network').style.filter = 'none';
+
+                nodes.forEach(n => n.style.opacity = '0.2');
+                allConnections.forEach(c => c.style.opacity = '0.05');
+
+                node.style.opacity = '1';
+                const relatedConnections = document.querySelectorAll(`.connection[data-from="${nodeId}"], .connection[data-to="${nodeId}"]`);
+                relatedConnections.forEach(rc => {
+                    rc.style.opacity = '1';
+                    document.getElementById(rc.dataset.from).style.opacity = '1';
+                    document.getElementById(rc.dataset.to).style.opacity = '1';
+                });
+            });
+            node.addEventListener('mouseleave', () => {
+                if (isNodeDragging) return;
+                infoPanel.style.opacity = '0';
+                network.style.filter = 'none';
+                nodes.forEach(n => n.style.opacity = '1');
+                allConnections.forEach(c => c.style.opacity = '0.4');
+            });
+        });
+    }
+
+    function initializeDragAndDrop() {
+        let activeNode = null;
+        let offsetX, offsetY;
+
+        nodes.forEach(node => {
+            node.addEventListener('mousedown', e => {
+                if (e.button !== 0) return;
+                isNodeDragging = true;
+                activeNode = node;
+                activeNode.classList.add('dragging');
+
+                const scale = getScaleFromTransform(network.style.transform);
+                const rect = activeNode.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                e.stopPropagation();
+            });
+        });
+
+        container.addEventListener('mousemove', e => {
+            if (!activeNode) return;
+            const scale = getScaleFromTransform(network.style.transform);
+            const networkRect = network.getBoundingClientRect();
+            
+            let x = (e.clientX - networkRect.left - offsetX) / scale;
+            let y = (e.clientY - networkRect.top - offsetY) / scale;
+
+            activeNode.style.left = `${x}px`;
+            activeNode.style.top = `${y}px`;
+            redrawConnectionsForNode(activeNode.id);
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (activeNode) {
+                activeNode.classList.remove('dragging');
+                saveLayout();
+            }
+            activeNode = null;
+            isNodeDragging = false;
+        });
+    }
+
+    function initializePanAndZoom() {
+        let scale = 0.5;
+        let panning = false;
+        let start = { x: 0, y: 0 };
+        let viewX = (container.clientWidth - 2200 * scale) / 2;
+        let viewY = (container.clientHeight - 1800 * scale) / 2;
+
+        function updateView() {
+            network.style.transform = `translate(${viewX}px, ${viewY}px) scale(${scale})`;
+        }
+
+        container.addEventListener('mousedown', e => {
+            if(isNodeDragging) return;
+            e.preventDefault();
+            panning = true;
+            container.style.cursor = 'grabbing';
+            start = { x: e.clientX - viewX, y: e.clientY - viewY };
+        });
+
+        container.addEventListener('mouseup', () => {
+            panning = false;
+            container.style.cursor = 'grab';
+        });
+
+        container.addEventListener('mouseleave', () => {
+            panning = false;
+            container.style.cursor = 'grab';
+        });
+
+        container.addEventListener('mousemove', e => {
+            if (!panning || isNodeDragging) return;
+            viewX = e.clientX - start.x;
+            viewY = e.clientY - start.y;
+            updateView();
+        });
+
+        container.addEventListener('wheel', e => {
+            e.preventDefault();
+            const delta = e.deltaY < 0 ? 1.1 : 0.9;
+            // PSC节点圆心位置 (1045 + 55, 620 + 55)
+            const pscCenterX = 1100;
+            const pscCenterY = 675;
+            const newScale = Math.max(0.2, Math.min(1.5, scale * delta));
+            // 以PSC圆心为缩放中心
+            viewX = pscCenterX - (pscCenterX / scale) * newScale;
+            viewY = pscCenterY - (pscCenterY / scale) * newScale;
+            scale = newScale;
+            updateView();
+        });
+
+        updateView();
+    }
+
+    function getScaleFromTransform(transform) {
+        const match = transform.match(/scale\(([^)]+)\)/);
+        return match ? parseFloat(match[1]) : 1;
+    }
+});
+</script>
+</body>
+</html>
