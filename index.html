@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>扬斯克城世界观设定 - 主页</title>
-    
-    <link rel="stylesheet" href="css/style.css"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="source-sha256" content="afe37e8a49bd44ca85e952cfcffa821994ab8431a1c9a5596e529815b276d01c">
+  <title>《扬斯克城架空世界观：已知设定汇总》 — 扬斯克城 v4.0beta</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
 </head>
-<body>
-    <div class="container">
-        <nav id="sidebar">
-            <button id="sidebar-toggle" title="切换导航栏">☰</button>
-    <h3>导航菜单</h3>
-    <ul>
-        <li><a href="index.html">主页</a></li>
-
-        <li><a href="pages/tech_core_LE.html">光能科技核心设定</a></li>
-        <li><a href="pages/history.html">光能科技发展史</a></li>
-        <li><a href="pages/city_structure_eco.html">上扬斯克城：结构与生态</a></li>
-        <li><a href="pages/power_structure.html">社会与权力结构</a></li>
-    </ul>
-</nav>
-
-        <main id="content">
-            <header>
-                <h1>扬斯克城世界观：已知设定汇总</h1>
-            </header>
-            <section>
-                <h2>欢迎来到上扬斯克城</h2>
-                <p>此站点收录了《扬斯克城世界观》的全部已知设定。</p>
-                <p>请使用左侧的导航栏来浏览不同的章节内容。</p>
-                <p>城市从海上拔地而起，位于西北海区域的城市群中，“上扬斯克城”（Verkhoyansk City）。</p>
-            </section>
-        </main>
-    </div>
-
-    <script src="js/main.js"></script>
+<body data-chapter="overview">
+  <button id="sidebar-toggle" type="button" aria-label="打开章节目录" aria-controls="sidebar" aria-expanded="false">☰</button>
+  <nav id="sidebar" aria-label="章节目录">
+    <a class="site-name" href="index.html">扬斯克城世界观</a>
+    <p class="site-version">v4.0beta</p>
+    <ol id="chapter-nav">
+        <li><a href="index.html" data-chapter="overview" class="active" aria-current="page">总纲：147年视角下的扬斯克</a></li>
+        <li><a href="pages/geography.html" data-chapter="geography">西北海地区：自然地理、资源与城市化前沿</a></li>
+        <li><a href="pages/world_context.html" data-chapter="world-context">世界观底色（147年）</a></li>
+        <li><a href="pages/tech_core_LE.html" data-chapter="light-energy">光能科技核心设定（世界观核心设定）</a></li>
+        <li><a href="pages/history.html" data-chapter="history">光能科技发展史（147年视角）</a></li>
+        <li><a href="pages/social_history.html" data-chapter="social-history">社会史、自治与现代扬斯克制度的形成</a></li>
+        <li><a href="pages/power_structure.html" data-chapter="social-power">社会组织、利益与权力网络</a></li>
+        <li><a href="pages/city_structure_eco.html" data-chapter="city-structure">上扬斯克城：结构、基础设施与生态</a></li>
+        <li><a href="pages/life_culture.html" data-chapter="life">生活文化</a></li>
+        <li><a href="pages/engineering.html" data-chapter="engineering">工程工作值与待校核参数和目前存在的问题：</a></li>
+    </ol>
+    <a class="source-download" href="assets/worldbuilding-v4.0beta.md" download="《扬斯克城世界观：已知设定汇总》_v4.0beta.md">下载原文</a>
+  </nav>
+  <main id="content" aria-labelledby="worldbuilding-title">
+    <article id="worldbuilding" data-source-sha256="afe37e8a49bd44ca85e952cfcffa821994ab8431a1c9a5596e529815b276d01c" data-chapter-index="0">
+<h1 id="worldbuilding-title"><strong>《扬斯克城架空世界观：已知设定汇总》</strong></h1>
+<p>“上扬斯克城”（Verkhoyansk City）横跨西北海西南海峡，东侧扎根于坚硬大陆基岩，北侧以枝桠状海基结构伸入西北海，是光能科技革命时代最重要的光能工业、港航、工程、技术与资本中心之一。长期观测得到，扬斯克城的三位构成，呈现一座厚薄不均、孔洞与人工峡谷交错、持续施工并不断重组的三维人工地理实体。</p>
+<h2 id="overview"><strong>总纲：147年视角下的扬斯克</strong></h2>
+<p>扬斯克是一座具有明显赛博朋克审美与社会矛盾的<strong>偏写实科幻巨构都市</strong>：潮湿水汽、高耸金属骨架、复杂立体生活圈、企业权力、阶层差异、黑市、灰色执照、腐败与技术伦理问题长期存在。但是重要的一点是，这里的宏观工程、制度与经济必须具有足以让城市跨越数代人持续运行的韧性。自从光能科技即本架空世界观的核心，扬斯克的长期世界地位不依赖“只有这里拥有光能”。其竞争力来自复合网络：西北海海峡与国际航运咽喉、长期运行的深水港航资产、高品质谐振材料加工传统、直接锚定深层基岩的重工业资产、最早形成的工程人才与供应链、ULTE（通用光能技术能源）与NWSCB（西北海建设局）等经过了长期竞争和发展后的巨型企业或机构积累的工程标准与认证体系、国际普遍认定的中立法理下的结算与仲裁环境，以及百余年形成的强集聚效应。</p>
+<p>此外，扬斯克在社会学层面同时拥有一种重要的身份：<strong>文明世界的光能试验场</strong>。058—090年的扬斯克第一代城市建设时期属于真正的“原始野蛮”，许多规范是在重大技术和建设事故之后，在伦理和人文的压力下形成；147年的壮年期扬斯克则更接近混沌中立——仍允许前沿技术试验和项目把材料、设备和局部区块推向<strong>极限</strong>，同时<strong>主承重、主能源、生命维持与中立港航秩序</strong>在严格的规定下，不允许被打破。成功经验会转化为包括扬斯克在内的文明世界的标准、专利、认证、保险和人才优势，失败则在扬斯克留下少数人了解真相的痕迹。</p>
+<blockquote>
+<p><strong>当前文档状态：</strong> 精确行政区数量、近代构造事件年份、部分海峡与结构尺寸、重大沉降事故的正式名称和年份仍处于工作稿阶段；相关条目会明确标注“工作值”或“待定”。</p>
+</blockquote>
+    </article>
+    <nav class="chapter-pager" aria-label="章节翻页">
+      <a class="next-chapter" href="pages/geography.html"><small>下一章</small><span>西北海地区：自然地理、资源与城市化前沿</span></a>
+    </nav>
+  </main>
 </body>
 </html>

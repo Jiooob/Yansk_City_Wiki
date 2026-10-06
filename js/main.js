@@ -1,106 +1,117 @@
-document.addEventListener('DOMContentLoaded', () => {
+(() => {
+    'use strict';
+
     const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const toggle = document.getElementById('sidebar-toggle');
     const content = document.getElementById('content');
-    
-    // 状态管理
-    let isOpen = false;
-    
-    // 初始化页面
-    function initializePage() {
-        // 临时禁用动画防止页面加载时的闪烁
-        document.body.classList.add('no-transition');
-        
-        // 检查是否应该保持展开状态
-        if (localStorage.getItem('sidebarOpen') === 'true') {
-            openSidebar();
+    const navigation = document.getElementById('chapter-nav');
+    if (!sidebar || !toggle || !content || !navigation) return;
+
+    const mobile = window.matchMedia('(max-width: 760px)');
+    const links = Array.from(navigation.querySelectorAll('a[data-chapter]'));
+    const storageKey = 'yansk-wiki-sidebar-open';
+    let expanded = false;
+    let desktopExpanded = null;
+
+    function desktopPreference() {
+        if (desktopExpanded !== null) return desktopExpanded;
+        desktopExpanded = true;
+        try {
+            const saved = localStorage.getItem(storageKey);
+            if (saved === 'true' || saved === 'false') desktopExpanded = saved === 'true';
+        } catch {
+            // File previews or private browsing can disable storage.
         }
-        
-        // 50ms后重新启用动画
-        setTimeout(() => {
-            document.body.classList.remove('no-transition');
-        }, 50);
+        return desktopExpanded;
     }
-    
-    // 展开侧边栏
-    function openSidebar() {
-        isOpen = true;
-        sidebar.classList.add('open');
-        document.body.classList.add('sidebar-open');
-        localStorage.setItem('sidebarOpen', 'true');
-    }
-    
-    // 收起侧边栏
-    function closeSidebar() {
-        isOpen = false;
-        sidebar.classList.remove('open');
-        document.body.classList.remove('sidebar-open');
-        localStorage.setItem('sidebarOpen', 'false');
-    }
-    
-    // 切换侧边栏状态
-    function toggleSidebar() {
-        if (isOpen) {
-            closeSidebar();
-        } else {
-            openSidebar();
+
+    function rememberDesktop(next) {
+        desktopExpanded = next;
+        try {
+            localStorage.setItem(storageKey, String(next));
+        } catch {
+            // Navigation remains usable without persistent preferences.
         }
     }
-    
-    // 切换按钮点击事件
-    sidebarToggle.addEventListener('click', (event) => {
-        event.stopPropagation();
-        toggleSidebar();
-    });
-    
-    // 点击外部区域收起侧边栏
-    document.addEventListener('click', (event) => {
-        // 如果点击的不是侧边栏内部且侧边栏是展开的，则收起
-        if (isOpen && !sidebar.contains(event.target)) {
-            closeSidebar();
-        }
-    });
-    
-    // 阻止侧边栏内部点击事件冒泡
-    sidebar.addEventListener('click', (event) => {
-        event.stopPropagation();
-    });
-    
-    // 导航链接点击时保持侧边栏状态
-    const navLinks = sidebar.querySelectorAll('a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            // 保持当前侧边栏状态到下一个页面
-            localStorage.setItem('sidebarOpen', isOpen.toString());
-        });
-    });
-    
-    // 高亮当前页面链接
-    function highlightCurrentPage() {
-        const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('#sidebar a');
-        
-        navLinks.forEach(link => {
-            const linkPath = link.getAttribute('href');
-            // 处理相对路径匹配
-            if (currentPath.endsWith(linkPath) || 
-                (linkPath.startsWith('../') && currentPath.endsWith(linkPath.replace('../', ''))) ||
-                (currentPath.includes('index.html') && linkPath === 'index.html')) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
+
+    function setExpanded(next, { focus = false, remember = true } = {}) {
+        expanded = Boolean(next);
+        sidebar.hidden = !expanded;
+        toggle.setAttribute('aria-expanded', String(expanded));
+        toggle.setAttribute('aria-label', expanded ? '收起章节目录' : '展开章节目录');
+        toggle.title = expanded ? '收起章节目录' : '展开章节目录';
+        document.body.classList.toggle('sidebar-open', expanded);
+        content.inert = mobile.matches && expanded;
+        if (remember && !mobile.matches) rememberDesktop(expanded);
+
+        if (focus) {
+            if (expanded && mobile.matches) {
+                (links.find(link => link.getAttribute('aria-current') === 'page') || links[0] || toggle)
+                    .focus({ preventScroll: true });
+            } else if (!expanded) {
+                toggle.focus({ preventScroll: true });
             }
-        });
+        }
     }
-    
-    // 键盘快捷键支持 (Esc键关闭侧边栏)
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && isOpen) {
-            closeSidebar();
+
+    // Current chapters are marked in each static page, so navigation needs no script.
+    // Only old root-page chapter hashes are redirected to their new chapter pages.
+    const isRootPage = location.pathname.endsWith('/') || /\/index\.html$/.test(location.pathname);
+    if (isRootPage && location.hash) {
+        const oldChapter = location.hash.slice(1);
+        const link = links.find(item => item.dataset.chapter === oldChapter);
+        if (link && link.getAttribute('aria-current') !== 'page') {
+            location.replace(link.href);
+            return;
+        }
+    }
+
+    document.body.classList.add('sidebar-enhanced');
+    setExpanded(mobile.matches ? false : desktopPreference(), { remember: false });
+
+    toggle.addEventListener('click', () => setExpanded(!expanded, { focus: true }));
+
+    sidebar.addEventListener('click', event => {
+        const link = event.target.closest('a[href]');
+        if (mobile.matches && link && sidebar.contains(link)) {
+            setExpanded(false, { focus: true });
         }
     });
-    
-    // 初始化
-    initializePage();
-    highlightCurrentPage();
-});
+
+    document.addEventListener('click', event => {
+        if (!expanded || !mobile.matches) return;
+        if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+            setExpanded(false, { focus: true });
+        }
+    });
+
+    document.addEventListener('keydown', event => {
+        if (!expanded) return;
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            setExpanded(false, { focus: true });
+            return;
+        }
+        if (event.key !== 'Tab' || !mobile.matches) return;
+
+        const focusable = [toggle, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+        if (event.shiftKey && (active === first || !focusable.includes(active))) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && (active === last || !focusable.includes(active))) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
+
+    const resize = () => {
+        const hadFocus = sidebar.contains(document.activeElement);
+        setExpanded(mobile.matches ? false : desktopPreference(), { remember: false });
+        if (hadFocus && !expanded) toggle.focus({ preventScroll: true });
+    };
+    if (mobile.addEventListener) mobile.addEventListener('change', resize);
+    else mobile.addListener(resize);
+})();
