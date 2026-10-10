@@ -1,0 +1,57 @@
+{
+  "title": "扬斯克城世界观",
+  "version": "v4.0beta",
+  "home": "index.md",
+  "navigation": [
+    {
+      "source": "index.md",
+      "label": "总纲：147年视角下的扬斯克",
+      "id": "overview"
+    },
+    {
+      "source": "geography.md",
+      "label": "西北海地区：自然地理、资源与城市化前沿",
+      "id": "geography"
+    },
+    {
+      "source": "world_context.md",
+      "label": "梗概（147年）",
+      "id": "world-context"
+    },
+    {
+      "source": "tech_core_LE.md",
+      "label": "光能科技核心设定（世界观核心设定）",
+      "id": "light-energy"
+    },
+    {
+      "source": "history.md",
+      "label": "光能科技发展史（147年视角）",
+      "id": "history"
+    },
+    {
+      "source": "social_history.md",
+      "label": "社会史、自治与现代扬斯克制度的形成",
+      "id": "social-history"
+    },
+    {
+      "source": "power_structure.md",
+      "label": "社会组织、利益与权力网络",
+      "id": "social-power"
+    },
+    {
+      "source": "city_structure_eco.md",
+      "label": "上扬斯克城：结构、基础设施与生态",
+      "id": "city-structure"
+    },
+    {
+      "source": "life_culture.md",
+      "label": "生活文化",
+      "id": "life"
+    },
+    {
+      "source": "engineering.md",
+      "label": "工程工作值与待校核参数和目前存在的问题：",
+      "id": "engineering"
+    }
+  ]
+}
